@@ -28,15 +28,19 @@ class _GajiPageState extends State<GajiPage> {
                 onPressed: () {
                   _onPressed(context: context, locale: 'id');
                 },
-                icon: const Icon(Icons.calendar_today),
+                icon: const Icon(Icons.calendar_today, color: Colors.white70),
                 label: _selected == null
-                    ? const Text('Bulan dan Tahun Belum Dipilih')
-                    : Text(DateFormat('MMMM y', 'id_ID').format(_selected!)),
+                    ? const Text('Bulan dan Tahun Belum Dipilih',
+                        style: TextStyle(color: Colors.white70, fontSize: 16.0))
+                    : Text(DateFormat('MMMM y', 'id_ID').format(_selected!),
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 16.0)),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),
+                  backgroundColor: Colors.blue,
                 ),
               ),
               const SizedBox(height: 16.0),
@@ -101,14 +105,17 @@ class _GajiPageState extends State<GajiPage> {
       firstDate: DateTime(2019),
       lastDate: DateTime(2030),
       locale: localeObj,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.blue, // Set the primary color to blue
+            colorScheme: const ColorScheme.light(
+                primary: Colors.blue), // Set the color scheme to blue
+          ),
+          child: child ?? Container(),
+        );
+      },
     );
-    // final selected = await showDatePicker(
-    //   context: context,
-    //   initialDate: _selected ?? DateTime.now(),
-    //   firstDate: DateTime(2019),
-    //   lastDate: DateTime(2022),
-    //   locale: localeObj,
-    // );
     if (selected != null) {
       setState(() {
         _selected = selected;

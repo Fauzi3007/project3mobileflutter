@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -241,8 +243,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    primary: Colors.white,
-                    onPrimary: Colors.black,
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
                     elevation: 5,
                     minimumSize: const Size(double.infinity, 50),
                   ),
@@ -258,8 +260,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    primary: Colors.white,
-                    onPrimary: Colors.black,
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
                     elevation: 5,
                     minimumSize: const Size(double.infinity, 50),
                   ),
@@ -275,8 +277,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    primary: Colors.red,
-                    onPrimary: Colors.white,
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
                     elevation: 5,
                     minimumSize: const Size(double.infinity, 50),
                   ),

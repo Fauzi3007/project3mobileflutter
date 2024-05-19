@@ -10,6 +10,13 @@ class PelangganPage extends StatefulWidget {
 class _PelangganPageState extends State<PelangganPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pelanggan Page'),
+      ),
+      body: const Center(
+        child: Text('Welcome to Pelanggan Page'),
+      ),
+    );
   }
 }

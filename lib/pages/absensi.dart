@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -12,8 +14,13 @@ class AbsensiPage extends StatefulWidget {
 
 class _AbsensiPageState extends State<AbsensiPage> {
   late GoogleMapController mapController;
-  late LatLng myPosition;
+  LatLng? myPosition;
   String _status = 'hadir';
+  bool isMockLocation = false;
+  bool isWithinRadius = false;
+
+  final LatLng kantorPdamLocation = const LatLng(-0.914032, 100.467388);
+  final double radius = 200; // Radius in meters
 
   @override
   void initState() {
@@ -31,10 +38,23 @@ class _AbsensiPageState extends State<AbsensiPage> {
           desiredAccuracy: LocationAccuracy.high);
       setState(() {
         myPosition = LatLng(position.latitude, position.longitude);
+        isMockLocation = position.isMocked;
+        isWithinRadius =
+            _isWithinRadius(myPosition!, kantorPdamLocation, radius);
       });
     } catch (e) {
       print(e);
     }
+  }
+
+  bool _isWithinRadius(LatLng position, LatLng target, double radius) {
+    final double distance = Geolocator.distanceBetween(
+      position.latitude,
+      position.longitude,
+      target.latitude,
+      target.longitude,
+    );
+    return distance <= radius;
   }
 
   @override
@@ -42,42 +62,85 @@ class _AbsensiPageState extends State<AbsensiPage> {
     return Scaffold(
       body: Stack(
         children: [
-          GoogleMap(
-            mapType: MapType.hybrid, // Change the map type here
-            buildingsEnabled: true,
-            circles: {
-              Circle(
-                circleId: const CircleId('circle'),
-                center: const LatLng(-0.914032, 100.467388),
-                radius: 160,
-                fillColor: Colors.blue.withOpacity(0.5),
-                strokeWidth: 1,
+          myPosition == null
+              ? const Center(child: CircularProgressIndicator())
+              : GoogleMap(
+                  mapType: MapType.hybrid,
+                  buildingsEnabled: true,
+                  circles: {
+                    Circle(
+                      circleId: const CircleId('circle'),
+                      center: kantorPdamLocation,
+                      radius: radius,
+                      fillColor: Colors.blue.withOpacity(0.5),
+                      strokeWidth: 1,
+                    ),
+                  },
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: myPosition!,
+                    zoom: 18.0,
+                  ),
+                  markers: {
+                    const Marker(
+                      markerId: MarkerId('marker'),
+                      position: LatLng(-0.914032, 100.467388),
+                      infoWindow: InfoWindow(
+                        title: 'Kantor PDAM Tirta Sakti',
+                        snippet: 'Cabang Padang',
+                      ),
+                    ),
+                    Marker(
+                      markerId: const MarkerId('myPosition'),
+                      position: myPosition!,
+                      infoWindow: const InfoWindow(
+                        title: 'My Position',
+                        snippet: 'Current Location',
+                      ),
+                    ),
+                  },
+                ),
+          if (isMockLocation)
+            Positioned(
+              bottom: 285,
+              left: 5,
+              right: 5,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                height: 50,
+                padding: const EdgeInsets.all(10),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.warning,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Lokasi palsu terdeteksi. Matikan mock location.',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            },
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(-0.914032, 100.467388),
-              zoom: 18.0,
             ),
-            markers: {
-              const Marker(
-                markerId: MarkerId('marker'),
-                position: LatLng(-0.914032, 100.467388),
-                infoWindow: InfoWindow(
-                  title: 'Kantor PDAM Tirta Sakti',
-                  snippet: 'Cabang Padang',
-                ),
-              ),
-              Marker(
-                markerId: const MarkerId('myPosition'),
-                position: myPosition,
-                infoWindow: InfoWindow(
-                  title: 'My Position',
-                  snippet: 'Current Location',
-                ),
-              ),
-            },
-          ),
           Positioned(
             bottom: 240,
             left: 5,
@@ -97,21 +160,23 @@ class _AbsensiPageState extends State<AbsensiPage> {
               ),
               height: 40,
               padding: const EdgeInsets.all(10),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.location_on,
                     size: 20,
-                    color: Colors.red,
+                    color: isWithinRadius ? Colors.green : Colors.red,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(
-                    'Anda belum berada di radius absen',
+                    isWithinRadius
+                        ? 'Anda berada di dalam radius absen'
+                        : 'Anda belum berada di radius absen',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red,
+                      color: isWithinRadius ? Colors.green : Colors.red,
                     ),
                   ),
                 ],
@@ -239,14 +304,16 @@ class _AbsensiPageState extends State<AbsensiPage> {
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Absensi berhasil'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    },
+                    onPressed: isMockLocation || !isWithinRadius
+                        ? null
+                        : () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Absensi berhasil'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue[700],
                       minimumSize: const Size(double.infinity, 50),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DataAbsensiPage extends StatelessWidget {
+  const DataAbsensiPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +24,7 @@ class DataAbsensiPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${absensi.tanggal}',
+                    absensi.tanggal,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -65,7 +67,7 @@ class DataAbsensiPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${absensi.waktuMasuk}',
+                    absensi.waktuMasuk,
                   ),
                   const Text(
                     'Keluar',
@@ -75,7 +77,7 @@ class DataAbsensiPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${absensi.waktuKeluar}',
+                    absensi.waktuKeluar,
                   ),
                 ],
               ),
