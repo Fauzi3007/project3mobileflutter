@@ -5,7 +5,11 @@ import '../services/service.dart'; // Import any necessary service dependencies
 
 class PencatatanService {
   Future<List<Pencatatan>> fetchPencatatanList() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/pencatatan'));
+    final response = await http.get(Uri.parse('$baseUrl/api/pencatatan'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -16,7 +20,11 @@ class PencatatanService {
   }
 
   Future<Pencatatan> fetchPencatatan(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/pencatatan/$id'));
+    final response = await http.get(Uri.parse('$baseUrl/api/pencatatan/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode == 200) {
       return Pencatatan.fromJson(json.decode(response.body));
@@ -30,6 +38,8 @@ class PencatatanService {
       Uri.parse('$baseUrl/pencatatan'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(pencatatan.toJson()),
     );
@@ -44,6 +54,8 @@ class PencatatanService {
       Uri.parse('$baseUrl/pencatatan/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(pencatatan.toJson()),
     );
@@ -54,7 +66,11 @@ class PencatatanService {
   }
 
   Future<void> deletePencatatan(int id) async {
-    final response = await http.delete(Uri.parse('$baseUrl/pencatatan/$id'));
+    final response = await http.delete(Uri.parse('$baseUrl/pencatatan/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode != 204) {
       throw Exception('Failed to delete pencatatan');

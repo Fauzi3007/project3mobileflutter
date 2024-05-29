@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/absensi.dart'; // Import the appropriate absensi model
-import '../services/service.dart'; // Import any necessary service dependencies
+import '../models/absensi.dart';
+import '../services/service.dart';
 
 class AbsensiService {
   Future<List<Absensi>> fetchAbsensiList() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/absensi'));
+    final response = await http.get(Uri.parse('$baseUrl/api/absensi'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -16,7 +20,11 @@ class AbsensiService {
   }
 
   Future<Absensi> fetchAbsensi(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/absensi/$id'));
+    final response = await http.get(Uri.parse('$baseUrl/api/absensi/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode == 200) {
       return Absensi.fromJson(json.decode(response.body));
@@ -30,6 +38,8 @@ class AbsensiService {
       Uri.parse('$baseUrl/absensi'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(absensi.toJson()),
     );
@@ -44,6 +54,8 @@ class AbsensiService {
       Uri.parse('$baseUrl/absensi/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(absensi.toJson()),
     );
@@ -54,7 +66,14 @@ class AbsensiService {
   }
 
   Future<void> deleteAbsensi(int id) async {
-    final response = await http.delete(Uri.parse('$baseUrl/absensi/$id'));
+    final response = await http.delete(
+      Uri.parse('$baseUrl/absensi/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
+      },
+    );
 
     if (response.statusCode != 204) {
       throw Exception('Failed to delete absensi');

@@ -5,7 +5,11 @@ import '../services/service.dart'; // Import any necessary service dependencies
 
 class PelangganService {
   Future<List<Pelanggan>> fetchPelangganList() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/pelanggan'));
+    final response = await http.get(Uri.parse('$baseUrl/api/pelanggan'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -16,7 +20,11 @@ class PelangganService {
   }
 
   Future<Pelanggan> fetchPelanggan(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/pelanggan/$id'));
+    final response = await http.get(Uri.parse('$baseUrl/api/pelanggan/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode == 200) {
       return Pelanggan.fromJson(json.decode(response.body));
@@ -30,6 +38,8 @@ class PelangganService {
       Uri.parse('$baseUrl/pelanggan'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(pelanggan.toJson()),
     );
@@ -44,6 +54,8 @@ class PelangganService {
       Uri.parse('$baseUrl/pelanggan/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(pelanggan.toJson()),
     );
@@ -54,7 +66,11 @@ class PelangganService {
   }
 
   Future<void> deletePelanggan(int id) async {
-    final response = await http.delete(Uri.parse('$baseUrl/pelanggan/$id'));
+    final response = await http.delete(Uri.parse('$baseUrl/pelanggan/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode != 204) {
       throw Exception('Failed to delete pelanggan');

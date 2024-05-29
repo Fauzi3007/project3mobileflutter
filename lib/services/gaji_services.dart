@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/gaji.dart'; // Import the appropriate gaji model
-import '../services/service.dart'; // Import any necessary service dependencies
+import '../models/gaji.dart';
+import '../services/service.dart';
 
 class GajiService {
   Future<List<Gaji>> fetchGajiList() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/gaji'));
+    final response = await http.get(Uri.parse('$baseUrl/api/gaji'), headers: {
+      'Authorization': 'Bearer ${await fetchToken()}',
+      'Accept': 'application/json'
+    });
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -16,7 +19,11 @@ class GajiService {
   }
 
   Future<Gaji> fetchGaji(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/gaji/$id'));
+    final response = await http.get(Uri.parse('$baseUrl/api/gaji/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode == 200) {
       return Gaji.fromJson(json.decode(response.body));
@@ -28,8 +35,9 @@ class GajiService {
   Future<void> createGaji(Gaji gaji) async {
     final response = await http.post(
       Uri.parse('$baseUrl/gaji'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+      headers: {
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(gaji.toJson()),
     );
@@ -42,8 +50,9 @@ class GajiService {
   Future<void> updateGaji(int id, Gaji gaji) async {
     final response = await http.put(
       Uri.parse('$baseUrl/gaji/$id'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+      headers: {
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(gaji.toJson()),
     );
@@ -54,7 +63,11 @@ class GajiService {
   }
 
   Future<void> deleteGaji(int id) async {
-    final response = await http.delete(Uri.parse('$baseUrl/gaji/$id'));
+    final response = await http.delete(Uri.parse('$baseUrl/gaji/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode != 204) {
       throw Exception('Failed to delete gaji');

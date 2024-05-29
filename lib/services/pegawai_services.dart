@@ -5,7 +5,11 @@ import '../services/service.dart';
 
 class PegawaiService {
   Future<List<Pegawai>> fetchPegawaiList() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/pegawai'));
+    final response = await http.get(Uri.parse('$baseUrl/api/pegawai'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -16,7 +20,11 @@ class PegawaiService {
   }
 
   Future<Pegawai> fetchPegawai(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/pegawai/$id'));
+    final response = await http.get(Uri.parse('$baseUrl/api/pegawai/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode == 200) {
       return Pegawai.fromJson(json.decode(response.body));
@@ -30,6 +38,7 @@ class PegawaiService {
       Uri.parse('$baseUrl/pegawai'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await fetchToken()}',
       },
       body: jsonEncode(pegawai.toJson()),
     );
@@ -44,6 +53,8 @@ class PegawaiService {
       Uri.parse('$baseUrl/pegawai/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${await fetchToken()}',
       },
       body: jsonEncode(pegawai.toJson()),
     );
@@ -54,7 +65,11 @@ class PegawaiService {
   }
 
   Future<void> deletePegawai(int id) async {
-    final response = await http.delete(Uri.parse('$baseUrl/pegawai/$id'));
+    final response = await http.delete(Uri.parse('$baseUrl/pegawai/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode != 204) {
       throw Exception('Failed to delete pegawai');

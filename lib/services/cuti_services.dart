@@ -5,7 +5,10 @@ import '../services/service.dart'; // Import any necessary service dependencies
 
 class CutiService {
   Future<List<Cuti>> fetchCutiList() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/cuti'));
+    final response = await http.get(Uri.parse('$baseUrl/api/cuti'), headers: {
+      'Authorization': 'Bearer ${await fetchToken()}',
+      'Accept': 'application/json'
+    });
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -16,8 +19,11 @@ class CutiService {
   }
 
   Future<Cuti> fetchCuti(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/cuti/$id'));
-
+    final response = await http.get(Uri.parse('$baseUrl/api/cuti/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
     if (response.statusCode == 200) {
       return Cuti.fromJson(json.decode(response.body));
     } else {
@@ -28,8 +34,9 @@ class CutiService {
   Future<void> createCuti(Cuti cuti) async {
     final response = await http.post(
       Uri.parse('$baseUrl/cuti'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+      headers: {
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(cuti.toJson()),
     );
@@ -42,8 +49,9 @@ class CutiService {
   Future<void> updateCuti(int id, Cuti cuti) async {
     final response = await http.put(
       Uri.parse('$baseUrl/cuti/$id'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+      headers: {
+        'Authorization': 'Bearer ${await fetchToken()}',
+        'Accept': 'application/json'
       },
       body: jsonEncode(cuti.toJson()),
     );
@@ -54,7 +62,11 @@ class CutiService {
   }
 
   Future<void> deleteCuti(int id) async {
-    final response = await http.delete(Uri.parse('$baseUrl/cuti/$id'));
+    final response = await http.delete(Uri.parse('$baseUrl/cuti/$id'),
+        headers: {
+          'Authorization': 'Bearer ${await fetchToken()}',
+          'Accept': 'application/json'
+        });
 
     if (response.statusCode != 204) {
       throw Exception('Failed to delete cuti');

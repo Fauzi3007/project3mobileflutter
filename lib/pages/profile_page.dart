@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sipegpdam/pages/login_page.dart';
+import 'package:sipegpdam/services/service.dart';
 import '../models/pegawai.dart';
 import '../services/pegawai_services.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -61,26 +65,29 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Container(
         color: Colors.grey[200],
         padding: const EdgeInsets.all(20),
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _hasError
-                ? const Center(child: Text('Error fetching data'))
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              _buildProfileSection(),
-                              const SizedBox(height: 20),
-                              _buildActionButtons(),
-                            ],
-                          ),
-                        ),
+        child: Column(
+          children: [
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _hasError
+                    ? const Center(child: Text('Error fetching data'))
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [],
                       ),
-                    ],
-                  ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildProfileSection(),
+                    const SizedBox(height: 20),
+                    _buildActionButtons(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -223,7 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
         const SizedBox(height: 10),
         ElevatedButton.icon(
           onPressed: () {
-            // Handle logout button press
+            _handleLogout(context);
           },
           icon: const Icon(Icons.logout),
           label: const Text('Logout'),
@@ -238,6 +245,40 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+Future _logout() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
+  final response = await http.post(
+    Uri.parse('$baseUrl/api/auth/logout'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': '$token',
+      'Accept': 'application/json',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    prefs.remove('access_token');
+    return 'Logout successful!';
+  } else {
+    return 'Logout failed.';
+  }
+}
+
+void _handleLogout(BuildContext context) async {
+  String message = await _logout();
+  final scaffoldContext = context;
+  ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+  if (message == 'Logout successful!') {
+    Navigator.pushReplacement(
+      scaffoldContext,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 }
