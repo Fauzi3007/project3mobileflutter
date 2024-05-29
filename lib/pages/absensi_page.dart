@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:sipegpdam/models/absensi.dart';
+import 'package:sipegpdam/services/absensi_services.dart';
 
 class AbsensiPage extends StatefulWidget {
   const AbsensiPage({Key? key}) : super(key: key);
@@ -18,14 +20,54 @@ class _AbsensiPageState extends State<AbsensiPage> {
   String _status = 'hadir';
   bool isMockLocation = false;
   bool isWithinRadius = false;
+  final AbsensiService absensiService = AbsensiService();
+  TextEditingController keteranganController = TextEditingController();
 
   final LatLng kantorPdamLocation = const LatLng(-0.914032, 100.467388);
   final double radius = 200; // Radius in meters
+
+  void _submitAbsensi() {
+    // Gather necessary data for creating absensi
+    Absensi absensi = Absensi(
+        tanggal: DateTime.now(),
+        status: _status,
+        waktuMasuk:
+            DateFormat.Hm().parse(DateFormat.Hm().format(DateTime.now())),
+        waktuKeluar:
+            DateFormat.Hm().parse(DateFormat.Hm().format(DateTime.now())),
+        keterangan: keteranganController.text,
+        idPegawai: 1);
+
+    // Call createAbsensi method from AbsensiService
+    absensiService.createAbsensi(absensi).then((_) {
+      // Show success message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Absensi berhasil'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }).catchError((error) {
+      // Show error message to the user if creating absensi fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal membuat absensi: $error'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+  }
+
+  @override
+  void dispose() {
+    keteranganController.dispose();
+    super.dispose();
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -286,8 +328,9 @@ class _AbsensiPageState extends State<AbsensiPage> {
                       )
                     ],
                   ),
-                  const TextField(
-                    decoration: InputDecoration(
+                  TextField(
+                    controller: keteranganController,
+                    decoration: const InputDecoration(
                       hintText: 'Keterangan (Optional)',
                       border: OutlineInputBorder(),
                     ),
@@ -297,12 +340,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                     onPressed: isMockLocation || !isWithinRadius
                         ? null
                         : () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Absensi berhasil'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
+                            _submitAbsensi();
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue[700],

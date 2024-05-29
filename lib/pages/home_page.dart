@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sipegpdam/pages/cuti.dart';
-import 'package:sipegpdam/pages/dataabsensi.dart';
-import 'package:sipegpdam/pages/gaji.dart';
-import 'package:sipegpdam/pages/pelanggan.dart';
-import 'package:sipegpdam/pages/pencatatan.dart';
+import 'package:sipegpdam/pages/cuti_page.dart';
+import 'package:sipegpdam/pages/dataabsensi_page.dart';
+import 'package:sipegpdam/pages/gaji_page.dart';
+import 'package:sipegpdam/pages/pelanggan_page.dart';
+import 'package:sipegpdam/pages/pencatatan_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

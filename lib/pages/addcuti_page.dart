@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sipegpdam/models/cuti.dart';
+import 'package:sipegpdam/services/cuti_services.dart';
 
 class AddCutiPage extends StatefulWidget {
   const AddCutiPage({Key? key}) : super(key: key);
@@ -8,10 +10,23 @@ class AddCutiPage extends StatefulWidget {
 }
 
 class _AddCutiPageState extends State<AddCutiPage> {
+  final CutiService _cutiService = CutiService();
+
   final TextEditingController tanggalMulaiController = TextEditingController();
   final TextEditingController tanggalSelesaiController =
       TextEditingController();
   final TextEditingController keteranganController = TextEditingController();
+
+  Future<void> _createCuti(Cuti newCuti) async {
+    try {
+      await _cutiService.createCuti(newCuti);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cuti created successfully')),
+      );
+    } catch (e) {
+      print('Error creating cuti: $e');
+    }
+  }
 
   @override
   void dispose() {
@@ -71,7 +86,15 @@ class _AddCutiPageState extends State<AddCutiPage> {
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: () {
-                // Handle ubah data button press
+                Cuti newCuti = Cuti(
+                  idPegawai: 1,
+                  tanggalMulai: DateTime.parse(tanggalMulaiController.text),
+                  tanggalSelesai: DateTime.parse(tanggalSelesaiController.text),
+                  keterangan: keteranganController.text,
+                  status: 'menunggu',
+                );
+
+                _createCuti(newCuti);
               },
               icon: const Icon(Icons.save),
               label: const Text('Ajukan Cuti'),
