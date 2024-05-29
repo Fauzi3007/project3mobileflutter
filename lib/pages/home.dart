@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            height: 140,
+            height: 100,
             padding: const EdgeInsets.all(16),
             child: Stack(
               children: [
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                               CircleAvatar(
                                 backgroundImage:
                                     AssetImage('lib/images/avatar.jpeg'),
-                                radius: 40,
+                                radius: 30,
                               ),
                               SizedBox(width: 16),
                               Column(
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                                   Text(
                                     'John Doe',
                                     style: TextStyle(
-                                      fontSize: 24,
+                                      fontSize: 14,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                                   Text(
                                     'Staff',
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 12,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                               IconButton(
                                 icon: Icon(Icons.notifications),
                                 color: Colors.white,
-                                iconSize: 40,
+                                iconSize: 30,
                                 onPressed: null,
                               ),
                             ],
@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            height: 230,
+            height: 190,
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                       DateFormat('EEEE, d MMMM y', 'id_ID')
                           .format(DateTime.now()),
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 10,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
@@ -135,13 +135,12 @@ class _HomePageState extends State<HomePage> {
                     const Text(
                       '07:30 - 16:00',
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 10,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
-                const Divider(indent: 2, endIndent: 2),
                 const Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -151,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'Masuk',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 12,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
@@ -159,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             '07:30',
                             style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 16,
                               color: Colors.blue,
                             ),
                           ),
@@ -170,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'Keluar',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 12,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
@@ -178,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             '16:00',
                             style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 16,
                               color: Colors.blue,
                             ),
                           ),
@@ -188,27 +187,28 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const Divider(indent: 2, endIndent: 2),
+                SizedBox(height: 30),
                 Column(
                   children: [
                     const Center(
                       child: Text(
                         'Absensi Bulan Ini',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 12,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Column(
                           children: [
                             const Text(
                               'Hadir',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 10,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -216,13 +216,13 @@ class _HomePageState extends State<HomePage> {
                             const Text(
                               '20 Hari',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 12,
                                 color: Colors.green,
                               ),
                             ),
                             Container(
-                              width: 70,
-                              height: 7,
+                              width: 50,
+                              height: 5,
                               decoration: BoxDecoration(
                                 color: Colors.green,
                                 borderRadius: BorderRadius.circular(2),
@@ -235,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                             const Text(
                               'Izin',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 10,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -243,13 +243,13 @@ class _HomePageState extends State<HomePage> {
                             Text(
                               '1 Hari',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 12,
                                 color: Colors.yellow.shade800,
                               ),
                             ),
                             Container(
-                              width: 70,
-                              height: 7,
+                              width: 50,
+                              height: 5,
                               decoration: BoxDecoration(
                                 color: Colors.yellow.shade800,
                                 borderRadius: BorderRadius.circular(2),
@@ -262,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                             const Text(
                               'Cuti',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 10,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -270,13 +270,13 @@ class _HomePageState extends State<HomePage> {
                             const Text(
                               '1 Hari',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 12,
                                 color: Colors.red,
                               ),
                             ),
                             Container(
-                              width: 70,
-                              height: 7,
+                              width: 50,
+                              height: 5,
                               decoration: BoxDecoration(
                                 color: Colors.red,
                                 borderRadius: BorderRadius.circular(2),
@@ -296,7 +296,7 @@ class _HomePageState extends State<HomePage> {
             margin: const EdgeInsets.only(left: 20),
             child: const Text(
               'Menu Utama',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(
@@ -305,7 +305,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   GridView.count(
                     crossAxisCount: 3,
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(10),
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 16,
                     shrinkWrap: true,
@@ -385,8 +385,8 @@ Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
   return InkWell(
     onTap: onTap,
     child: Card(
-      elevation: 0, // Set elevation to 0 to make it transparent
-      color: Colors.transparent, // Set color to transparent
+      elevation: 0,
+      color: Colors.transparent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -400,16 +400,16 @@ Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
               height: 60,
               child: Icon(
                 icon,
-                size: 30, // Decrease the size to make it smaller
+                size: 30,
                 color: Colors.blue,
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 5),
           Text(
             title,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 10,
               color: Colors.black,
             ),
           ),

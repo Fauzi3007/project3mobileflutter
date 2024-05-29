@@ -1,9 +1,6 @@
-// ignore_for_file: avoid_print
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import '../models/pegawai.dart';
+import '../services/pegawai_services.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -13,281 +10,234 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Map<String, dynamic> _responseData = {};
+  Pegawai? _pegawai;
+  bool _isLoading = true;
+  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    fetchPegawai();
   }
 
-  Future<void> fetchData() async {
-    const url = 'http://10.0.2.2:8000/api/pegawai/1';
-
+  Future<void> fetchPegawai() async {
     try {
-      final response = await http.get(Uri.parse(url));
-      final responseData = json.decode(response.body);
+      Pegawai pegawai = await PegawaiService().fetchPegawai(1);
       setState(() {
-        _responseData = responseData;
+        _pegawai = pegawai;
+        _isLoading = false;
       });
-
-      // Print _responseData
-      print(_responseData);
-    } catch (error) {
-      print('Error: $error');
+    } catch (e) {
+      setState(() {
+        _hasError = true;
+        _isLoading = false;
+      });
+      print(e);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey[200], // Set the background color to light gray
-      padding: const EdgeInsets.all(20), // Add padding to the column
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Data Diri',
-            style: TextStyle(
-              fontSize: 24,
-              color: Colors.blueAccent,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Divider(
-            color: Colors.black,
-            thickness: 1,
-          ),
-          const SizedBox(height: 5),
-          const Text(
-            'Foto:',
-            style: TextStyle(
-              fontSize: 18,
-            ),
-          ),
-          Text(
-            '${_responseData['foto'] ?? 'No Image'}',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: _responseData.isEmpty
-                    ? const Center(child: CircularProgressIndicator())
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Nama Lengkap:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['nama_lengkap']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  'Jenis Kelamin:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['jenis_kelamin']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  'Tanggal Lahir:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['tgl_lahir']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  'Telepon:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['telepon']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  'Alamat:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['alamat']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 30),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Status Nikah:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['status_nikah']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  'Jumlah Anak:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['jumlah_anak']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  'Gaji Pokok:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['gaji_pokok']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  'Kantor Cabang:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['kantor_cabang']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  'Jabatan:',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  '${_responseData['jabatan']}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-            ],
-          ),
-          const SizedBox(
-              height:
-                  15), // Add margin between the buttons and the previous content
-          Expanded(
-            child: Column(
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Handle ubah data button press
-                  },
-                  icon: const Icon(Icons.edit),
-                  label: const Text('Ubah Data'),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    elevation: 5,
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Handle ganti password button press
-                  },
-                  icon: const Icon(Icons.lock),
-                  label: const Text('Ganti Password'),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    elevation: 5,
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Handle logout button press
-                  },
-                  icon: const Icon(Icons.logout),
-                  label: const Text('Logout'),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    elevation: 5,
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                ),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        actions: const [
+          CircleAvatar(
+            radius: 25,
+            backgroundImage: NetworkImage(
+              'https://imgs.search.brave.com/eBQndt052LAMVgGGACW3KEuCq71r97mAjPRgZYanPxY/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE1/MjI1NTYxODk2Mzkt/YjE1MGVkOWM0MzMw/P3E9ODAmdz0xMDAw/JmF1dG89Zm9ybWF0/JmZpdD1jcm9wJml4/bGliPXJiLTQuMC4z/Jml4aWQ9TTN3eE1q/QTNmREI4TUh4elpX/RnlZMmg4T0h4OGNH/VnljMjl1WVh4bGJu/d3dmSHd3Zkh4OE1B/PT0.jpeg',
+              scale: .8,
             ),
           ),
         ],
+        title: const Text(
+          'Data Diri',
+          style: TextStyle(
+            fontSize: 24,
+            color: Colors.white70,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
+      body: Container(
+        color: Colors.grey[200],
+        padding: const EdgeInsets.all(20),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _hasError
+                ? const Center(child: Text('Error fetching data'))
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              _buildProfileSection(),
+                              const SizedBox(height: 20),
+                              _buildActionButtons(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+      ),
+    );
+  }
+
+  Widget _buildProfileSection() {
+    if (_pegawai == null) {
+      return const Center(child: Text('No data available'));
+    }
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Nama Lengkap:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.namaLengkap,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('Jenis Kelamin:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.jenisKelamin,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('Tanggal Lahir:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.tglLahir,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('Telepon:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.telepon,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('Alamat:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.alamat,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 30),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Status Nikah:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.statusNikah,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('Jumlah Anak:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.jumlahAnak.toString(),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('Gaji Pokok:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.gajiPokok.toString(),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('Kantor Cabang:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.kantorCabang.toString(),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('Jabatan:', style: TextStyle(fontSize: 18)),
+                  Text(
+                    _pegawai!.jabatan.toString(),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return Column(
+      children: [
+        ElevatedButton.icon(
+          onPressed: () {
+            // Handle ubah data button press
+          },
+          icon: const Icon(Icons.edit),
+          label: const Text('Ubah Data'),
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            elevation: 5,
+            minimumSize: const Size(double.infinity, 50),
+          ),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton.icon(
+          onPressed: () {
+            // Handle ganti password button press
+          },
+          icon: const Icon(Icons.lock),
+          label: const Text('Ganti Password'),
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            elevation: 5,
+            minimumSize: const Size(double.infinity, 50),
+          ),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton.icon(
+          onPressed: () {
+            // Handle logout button press
+          },
+          icon: const Icon(Icons.logout),
+          label: const Text('Logout'),
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            elevation: 5,
+            minimumSize: const Size(double.infinity, 50),
+          ),
+        ),
+      ],
     );
   }
 }

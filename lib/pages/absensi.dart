@@ -130,9 +130,9 @@ class _AbsensiPageState extends State<AbsensiPage> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      'Lokasi palsu terdeteksi. Matikan mock location.',
+                      'Matikan mock location.',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 10,
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
                       ),
@@ -174,7 +174,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                         ? 'Anda berada di dalam radius absen'
                         : 'Anda belum berada di radius absen',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: isWithinRadius ? Colors.green : Colors.red,
                     ),
@@ -211,17 +211,18 @@ class _AbsensiPageState extends State<AbsensiPage> {
                         DateFormat('EEEE, d MMMM y', 'id_ID')
                             .format(DateTime.now()),
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const Text(
-                        '07:30 - 16:00',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
+                      Text(
+                        DateFormat.Hm().format(DateTime.now()),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -242,7 +243,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                           const Text(
                             'Hadir',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 10,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
@@ -259,7 +260,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                           const Text(
                             'Sakit',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 10,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
@@ -276,19 +277,8 @@ class _AbsensiPageState extends State<AbsensiPage> {
                           const Text(
                             'Izin',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 10,
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            DateFormat.Hm().format(DateTime.now()),
-                            style: const TextStyle(
-                              fontSize: 38,
-                              color: Colors.blue,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -324,7 +314,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                     child: const Text(
                       'Absen',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
