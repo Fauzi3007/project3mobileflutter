@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            height: 190,
+            height: 170,
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
@@ -150,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'Masuk',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 14,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             '07:30',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 18,
                               color: Colors.blue,
                             ),
                           ),
@@ -169,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'Keluar',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 14,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             '16:00',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 18,
                               color: Colors.blue,
                             ),
                           ),
@@ -186,8 +186,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                const Divider(indent: 2, endIndent: 2),
-                SizedBox(height: 30),
                 Column(
                   children: [
                     const Center(
@@ -306,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                   GridView.count(
                     crossAxisCount: 3,
                     padding: const EdgeInsets.all(10),
-                    mainAxisSpacing: 16,
+                    mainAxisSpacing: 1,
                     crossAxisSpacing: 16,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

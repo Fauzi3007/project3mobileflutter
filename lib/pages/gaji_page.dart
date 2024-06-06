@@ -43,19 +43,55 @@ class _GajiPageState extends State<GajiPage> {
                   backgroundColor: Colors.blue,
                 ),
               ),
-              const SizedBox(height: 16.0),
-              _buildRow(
-                  'Gaji Pokok', 'Rp. 3.000.000', 'Potongan', 'Rp. 300.000'),
-              const SizedBox(height: 16.0),
-              _buildRow(
-                  'Tunjangan Jabatan', 'Rp. 1.500.000', 'Pajak', 'Rp. 234.032'),
-              const SizedBox(height: 16.0),
-              _buildRow('Tunjangan Nikah', 'Rp. 100.000', 'Total Gaji',
-                  'Rp. 4.465.968'),
-              const SizedBox(height: 16.0),
-              _buildRow('Tunjangan Anak', 'Rp. 200.000', 'Tanggal',
-                  DateFormat('MMMM yyyy', 'id_ID').format(DateTime.now())),
-              const SizedBox(height: 16.0),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 16.0),
+                    _buildRow(
+                      'Gaji Pokok',
+                      'Rp. 3.000.000',
+                      'Potongan',
+                      'Rp. 300.000',
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildRow(
+                      'Tunjangan Jabatan',
+                      'Rp. 1.500.000',
+                      'Pajak',
+                      'Rp. 234.032',
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildRow(
+                      'Tunjangan Nikah',
+                      'Rp. 100.000',
+                      'Total Gaji',
+                      'Rp. 4.465.968',
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildRow(
+                      'Tunjangan Anak',
+                      'Rp. 200.000',
+                      'Tanggal',
+                      DateFormat('MMMM yyyy', 'id_ID').format(DateTime.now()),
+                    ),
+                    const SizedBox(height: 16.0),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

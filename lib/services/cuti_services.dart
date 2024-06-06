@@ -18,7 +18,7 @@ class CutiService {
     }
   }
 
-  Future<Cuti> fetchCuti(int id) async {
+  Future<Cuti> fetchCuti(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/cuti/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
@@ -46,7 +46,7 @@ class CutiService {
     }
   }
 
-  Future<void> updateCuti(int id, Cuti cuti) async {
+  Future<void> updateCuti(String id, Cuti cuti) async {
     final response = await http.put(
       Uri.parse('$baseUrl/cuti/$id'),
       headers: {
@@ -61,7 +61,7 @@ class CutiService {
     }
   }
 
-  Future<void> deleteCuti(int id) async {
+  Future<void> deleteCuti(String id) async {
     final response = await http.delete(Uri.parse('$baseUrl/cuti/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',

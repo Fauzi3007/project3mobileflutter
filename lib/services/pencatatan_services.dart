@@ -19,7 +19,7 @@ class PencatatanService {
     }
   }
 
-  Future<Pencatatan> fetchPencatatan(int id) async {
+  Future<Pencatatan> fetchPencatatan(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/pencatatan/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
@@ -49,7 +49,7 @@ class PencatatanService {
     }
   }
 
-  Future<void> updatePencatatan(int id, Pencatatan pencatatan) async {
+  Future<void> updatePencatatan(String id, Pencatatan pencatatan) async {
     final response = await http.put(
       Uri.parse('$baseUrl/pencatatan/$id'),
       headers: <String, String>{
@@ -65,7 +65,7 @@ class PencatatanService {
     }
   }
 
-  Future<void> deletePencatatan(int id) async {
+  Future<void> deletePencatatan(String id) async {
     final response = await http.delete(Uri.parse('$baseUrl/pencatatan/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',

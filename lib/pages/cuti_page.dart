@@ -31,7 +31,7 @@ class _CutiPageState extends State<CutiPage> {
   @override
   void initState() {
     super.initState();
-    // Fetch cuti list when the page is first initialized
+
     _fetchCutiList();
   }
 

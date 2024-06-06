@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<String?> fetchToken() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('token');
+  String? token = prefs.getString('access_token');
 
   if (token != null) {
     return token;
@@ -13,6 +13,18 @@ Future<String?> fetchToken() async {
   return null;
 }
 
-var PROTOCOL = 'http';
-var HOST = '10.0.2.2:8000';
+Future<String?> fetchUserId() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('id');
+
+  if (token != null) {
+    return token;
+  } else {
+    print('Token not found');
+  }
+  return null;
+}
+
+var PROTOCOL = 'https';
+var HOST = 'shining-verified-mantis.ngrok-free.app';
 var baseUrl = '$PROTOCOL://$HOST';

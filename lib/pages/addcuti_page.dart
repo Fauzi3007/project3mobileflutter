@@ -47,7 +47,7 @@ class _AddCutiPageState extends State<AddCutiPage> {
         child: Column(
           children: [
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: tanggalMulaiController,
               decoration: InputDecoration(
                 labelText: 'Tanggal Mulai',
@@ -57,9 +57,20 @@ class _AddCutiPageState extends State<AddCutiPage> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
+              onTap: () async {
+                DateTime? selectedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                );
+                if (selectedDate != null) {
+                  tanggalMulaiController.text = selectedDate.toString();
+                }
+              },
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: tanggalSelesaiController,
               decoration: InputDecoration(
                 labelText: 'Tanggal Selesai',
@@ -69,6 +80,17 @@ class _AddCutiPageState extends State<AddCutiPage> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
+              onTap: () async {
+                DateTime? selectedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                );
+                if (selectedDate != null) {
+                  tanggalSelesaiController.text = selectedDate.toString();
+                }
+              },
             ),
             const SizedBox(height: 16),
             TextField(

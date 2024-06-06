@@ -19,7 +19,7 @@ class PegawaiService {
     }
   }
 
-  Future<Pegawai> fetchPegawai(int id) async {
+  Future<Pegawai> fetchPegawai(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/pegawai/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
@@ -48,7 +48,7 @@ class PegawaiService {
     }
   }
 
-  Future<void> updatePegawai(int id, Pegawai pegawai) async {
+  Future<void> updatePegawai(String id, Pegawai pegawai) async {
     final response = await http.put(
       Uri.parse('$baseUrl/pegawai/$id'),
       headers: <String, String>{
@@ -64,7 +64,7 @@ class PegawaiService {
     }
   }
 
-  Future<void> deletePegawai(int id) async {
+  Future<void> deletePegawai(String id) async {
     final response = await http.delete(Uri.parse('$baseUrl/pegawai/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',

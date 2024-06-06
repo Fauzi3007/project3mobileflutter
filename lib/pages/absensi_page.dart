@@ -144,7 +144,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                 ),
           if (isMockLocation)
             Positioned(
-              bottom: 285,
+              bottom: 295,
               left: 5,
               right: 5,
               child: Container(
@@ -160,7 +160,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                     ),
                   ],
                 ),
-                height: 50,
+                height: 40,
                 padding: const EdgeInsets.all(10),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -184,7 +184,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
               ),
             ),
           Positioned(
-            bottom: 240,
+            bottom: 250,
             left: 5,
             right: 5,
             child: Container(
@@ -242,7 +242,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                   ),
                 ],
               ),
-              height: 230,
+              height: 240,
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [

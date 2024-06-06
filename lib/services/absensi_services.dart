@@ -19,7 +19,7 @@ class AbsensiService {
     }
   }
 
-  Future<Absensi> fetchAbsensi(int id) async {
+  Future<Absensi> fetchAbsensi(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/absensi/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
@@ -49,7 +49,7 @@ class AbsensiService {
     }
   }
 
-  Future<void> updateAbsensi(int id, Absensi absensi) async {
+  Future<void> updateAbsensi(String id, Absensi absensi) async {
     final response = await http.put(
       Uri.parse('$baseUrl/absensi/$id'),
       headers: <String, String>{
@@ -65,7 +65,7 @@ class AbsensiService {
     }
   }
 
-  Future<void> deleteAbsensi(int id) async {
+  Future<void> deleteAbsensi(String id) async {
     final response = await http.delete(
       Uri.parse('$baseUrl/absensi/$id'),
       headers: <String, String>{

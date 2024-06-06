@@ -18,7 +18,7 @@ class GajiService {
     }
   }
 
-  Future<Gaji> fetchGaji(int id) async {
+  Future<Gaji> fetchGaji(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/gaji/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
@@ -47,7 +47,7 @@ class GajiService {
     }
   }
 
-  Future<void> updateGaji(int id, Gaji gaji) async {
+  Future<void> updateGaji(String id, Gaji gaji) async {
     final response = await http.put(
       Uri.parse('$baseUrl/gaji/$id'),
       headers: {
@@ -62,7 +62,7 @@ class GajiService {
     }
   }
 
-  Future<void> deleteGaji(int id) async {
+  Future<void> deleteGaji(String id) async {
     final response = await http.delete(Uri.parse('$baseUrl/gaji/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
