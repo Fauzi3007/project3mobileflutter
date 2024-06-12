@@ -297,60 +297,68 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  GridView.count(
-                    crossAxisCount: 3,
-                    padding: const EdgeInsets.all(10),
-                    mainAxisSpacing: 1,
-                    crossAxisSpacing: 16,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      _buildMenuItem(Icons.calendar_today, 'Data Absensi', () {
-                        // Navigate to Data Absensi page
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const DataAbsensiPage()),
-                        );
-                      }),
-                      _buildMenuItem(Icons.attach_money, 'Info Gaji', () {
-                        // Navigate to Info Gaji page
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const GajiPage()),
-                        );
-                      }),
-                      _buildMenuItem(Icons.beach_access, 'Cuti', () {
-                        // Navigate to Cuti page
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CutiPage()),
-                        );
-                      }),
-                      _buildMenuItem(Icons.people, 'Pelanggan', () {
-                        // Navigate to Pelanggan page
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const PelangganPage()),
-                        );
-                      }),
-                      _buildMenuItem(Icons.note_add, 'Pencatatan', () {
-                        // Navigate to Pencatatan page
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const PencatatanPage()),
-                        );
-                      }),
-                      if (isAdminAdministrasi)
-                        _buildMenuItem(Icons.check, 'Persetujuan Cuti', () {
+          Container(
+            margin: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            height: 200,
+            padding: const EdgeInsets.all(16),
+            child: Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    GridView.count(
+                      crossAxisCount: 3,
+                      padding: const EdgeInsets.all(10),
+                      mainAxisSpacing: 1,
+                      crossAxisSpacing: 16,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        _buildMenuItem(Icons.calendar_today, 'Data Absensi',
+                            () {
+                          // Navigate to Data Absensi page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DataAbsensiPage()),
+                          );
+                        }),
+                        _buildMenuItem(Icons.attach_money, 'Info Gaji', () {
+                          // Navigate to Info Gaji page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const GajiPage()),
+                          );
+                        }),
+                        _buildMenuItem(Icons.beach_access, 'Cuti', () {
+                          // Navigate to Cuti page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CutiPage()),
+                          );
+                        }),
+                        _buildMenuItem(Icons.people, 'Pelanggan', () {
+                          // Navigate to Pelanggan page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PelangganPage()),
+                          );
+                        }),
+                        _buildMenuItem(Icons.note_add, 'Pencatatan', () {
                           // Navigate to Pencatatan page
                           Navigator.push(
                             context,
@@ -358,18 +366,28 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) => const PencatatanPage()),
                           );
                         }),
-                      if (isAdminKeuangan)
-                        _buildMenuItem(Icons.payment, 'Pemberian Gaji', () {
-                          // Navigate to Pencatatan page
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PencatatanPage()),
-                          );
-                        }),
-                    ],
-                  ),
-                ],
+                        if (isAdminAdministrasi)
+                          _buildMenuItem(Icons.check, 'Persetujuan Cuti', () {
+                            // Navigate to Pencatatan page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const PencatatanPage()),
+                            );
+                          }),
+                        if (isAdminKeuangan)
+                          _buildMenuItem(Icons.payment, 'Pemberian Gaji', () {
+                            // Navigate to Pencatatan page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const PencatatanPage()),
+                            );
+                          }),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

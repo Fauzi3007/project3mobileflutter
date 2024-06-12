@@ -45,7 +45,7 @@ class _DataAbsensiPageState extends State<DataAbsensiPage> {
         title: const Text('Data Absensi'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: _absensiList.length,
               itemBuilder: (context, index) {

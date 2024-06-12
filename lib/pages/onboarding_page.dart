@@ -16,17 +16,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'title': 'Welcome',
       'description': 'Welcome to our app!',
-      'image': 'assets/images/welcome.png',
+      'image': 'lib/images/onboardingwelcome.jpg ',
     },
     {
       'title': 'Features',
       'description': 'Explore amazing features!',
-      'image': 'assets/images/features.png',
+      'image': 'lib/images/onboardingfeature.jpg ',
     },
     {
       'title': 'Get Started',
       'description': 'Get started now!',
-      'image': 'assets/images/get_started.png',
+      'image': 'lib/images/onboardingstarted.jpg ',
     },
   ];
 
