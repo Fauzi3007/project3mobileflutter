@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'service.dart';
@@ -17,27 +18,37 @@ Future<String> login(String email, String password) async {
 
   if (response.statusCode == 200) {
     final token = jsonDecode(response.body)['access_token'];
+    print('Token: $token');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('access_token', token);
-
-    final me = await http.get(
-      Uri.parse('$baseUrl/api/auth/me'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },
-    );
-
-    if (me.statusCode == 200) {
-      final user = jsonDecode(me.body);
-      await prefs.setString('id', jsonEncode(user['id']));
-      await prefs.setString('id', jsonEncode(user['hak_akses']));
-    }
 
     return 'Login successful!';
   } else {
     return 'Login failed. Please check your credentials.';
+  }
+}
+
+Future<String> me() async {
+  final me = await http.get(
+    Uri.parse('$baseUrl/api/auth/me'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${await fetchToken()}',
+      'Accept': 'application/json',
+    },
+  );
+
+  if (me.statusCode == 200) {
+    final idUser = jsonDecode(me.body)['id'];
+    if (kDebugMode) {
+      print('Token: $idUser');
+    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('id', idUser);
+
+    return 'Fetch data successful!';
+  } else {
+    return 'Fetch data failed. Please check your credentials.';
   }
 }
 

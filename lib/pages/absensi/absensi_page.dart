@@ -114,7 +114,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                       circleId: const CircleId('circle'),
                       center: kantorPdamLocation,
                       radius: radius,
-                      fillColor: Colors.blue.withOpacity(0.5),
+                      fillColor: Colors.lightBlueAccent.withOpacity(0.5),
                       strokeWidth: 1,
                     ),
                   },
@@ -262,7 +262,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                         DateFormat.Hm().format(DateTime.now()),
                         style: const TextStyle(
                           fontSize: 12,
-                          color: Colors.blue,
+                          color: Colors.lightBlueAccent,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -343,7 +343,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                             _submitAbsensi();
                           },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[700],
+                      backgroundColor: Colors.lightBlueAccent,
                       minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),

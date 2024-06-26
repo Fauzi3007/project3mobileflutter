@@ -40,8 +40,11 @@ class _GajiPageState extends State<GajiPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.lightBlueAccent,
                 ),
+              ),
+              const SizedBox(
+                height: 16,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -60,6 +63,13 @@ class _GajiPageState extends State<GajiPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Text(
+                      'Bulan : ${DateFormat('MMMM yyyy', 'id_ID').format(DateTime.now())}',
+                      style: const TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 16.0),
                     _buildRow(
                       'Gaji Pokok',
@@ -78,17 +88,33 @@ class _GajiPageState extends State<GajiPage> {
                     _buildRow(
                       'Tunjangan Nikah',
                       'Rp. 100.000',
-                      'Total Gaji',
-                      'Rp. 4.465.968',
-                    ),
-                    const SizedBox(height: 16.0),
-                    _buildRow(
                       'Tunjangan Anak',
                       'Rp. 200.000',
-                      'Tanggal',
-                      DateFormat('MMMM yyyy', 'id_ID').format(DateTime.now()),
                     ),
                     const SizedBox(height: 16.0),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(0.0, 0, 45.0, 16.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Total :',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Spacer(),
+                          Text(
+                            'Rp. 4.465.968',
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -144,9 +170,11 @@ class _GajiPageState extends State<GajiPage> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            primaryColor: Colors.blue, // Set the primary color to blue
+            primaryColor:
+                Colors.lightBlueAccent, // Set the primary color to blue
             colorScheme: const ColorScheme.light(
-                primary: Colors.blue), // Set the color scheme to blue
+                primary:
+                    Colors.lightBlueAccent), // Set the color scheme to blue
           ),
           child: child ?? Container(),
         );

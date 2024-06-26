@@ -72,9 +72,16 @@ flutter:
   assets:
     - lib/images/avatar.jpeg
     - lib/images/tirta.png
-    - lib/images/onboardingfeature.jpg    
-    - lib/images/onboardingwelcome.jpg    
-    - lib/images/onboardingstarted.jpg    
+    - lib/images/approved.png
+    - lib/images/attendance.png
+    - lib/images/budget.png
+    - lib/images/documentation.png
+    - lib/images/leave.png
+    - lib/images/rating.png
+    - lib/images/salary.png
+    - lib/images/fitur.png    
+    - lib/images/welcome.png    
+    - lib/images/started.png    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

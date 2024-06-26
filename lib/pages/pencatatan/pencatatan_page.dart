@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sipegpdam/pages/addpencatatan_page.dart';
+import 'package:sipegpdam/pages/pencatatan/addpencatatan_page.dart';
 
 class PencatatanPage extends StatefulWidget {
   const PencatatanPage({super.key});
@@ -14,6 +14,7 @@ class _PencatatanPageState extends State<PencatatanPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pencatatan Page'),
+        backgroundColor: Colors.lightBlueAccent,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

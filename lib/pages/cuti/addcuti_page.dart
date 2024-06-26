@@ -124,7 +124,7 @@ class _AddCutiPageState extends State<AddCutiPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.lightBlueAccent,
                 foregroundColor: Colors.white,
                 elevation: 5,
                 minimumSize: const Size(double.infinity, 50),

@@ -16,17 +16,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'title': 'Welcome',
       'description': 'Welcome to our app!',
-      'image': 'lib/images/onboardingwelcome.jpg ',
+      'image': 'lib/images/welcome.png ',
     },
     {
       'title': 'Features',
       'description': 'Explore amazing features!',
-      'image': 'lib/images/onboardingfeature.jpg ',
+      'image': 'lib/images/fitur.png ',
     },
     {
       'title': 'Get Started',
       'description': 'Get started now!',
-      'image': 'lib/images/onboardingstarted.jpg ',
+      'image': 'lib/images/started.png ',
     },
   ];
 
@@ -61,6 +61,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                backgroundColor: Colors.lightBlueAccent,
+                foregroundColor: Colors.black,
+                elevation: 5,
+                minimumSize: const Size(300, 50),
+              ),
               onPressed: () {
                 if (_currentPage < _pages.length - 1) {
                   _pageController.nextPage(
@@ -78,6 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Text(
                   _currentPage == _pages.length - 1 ? 'Get Started' : 'Next'),
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -99,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       height: 8,
       width: isActive ? 24 : 8,
       decoration: BoxDecoration(
-        color: isActive ? Colors.blue : Colors.grey,
+        color: isActive ? Colors.lightBlueAccent : Colors.grey,
         borderRadius: BorderRadius.circular(12),
       ),
     );

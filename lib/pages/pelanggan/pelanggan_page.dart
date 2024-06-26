@@ -57,7 +57,7 @@ class _PelangganPageState extends State<PelangganPage> {
             ),
           ],
         ),
-        height: 300,
+        height: double.infinity,
         padding: const EdgeInsets.all(16),
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -72,8 +72,8 @@ class _PelangganPageState extends State<PelangganPage> {
                         title: Text(pelanggan.nomorPelanggan),
                         subtitle: Text(pelanggan.namaPelanggan),
                         trailing: IconButton(
-                          icon:
-                              const Icon(Icons.location_on, color: Colors.blue),
+                          icon: const Icon(Icons.location_on,
+                              color: Colors.lightBlueAccent),
                           onPressed: () {
                             double latitude = pelanggan.latitude;
                             double longitude = pelanggan.longitude;

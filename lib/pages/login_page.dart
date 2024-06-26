@@ -16,12 +16,14 @@ class _LoginPageState extends State<LoginPage> {
   void _handleLogin() async {
     String message =
         await login(_emailController.text, _passwordController.text);
+
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
     if (message == 'Login successful!') {
       // ignore: use_build_context_synchronously
+      // await me();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const MainLayout()),
@@ -32,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[600],
+      backgroundColor: Colors.lightBlueAccent,
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -96,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      backgroundColor: Colors.blue[600],
+                      backgroundColor: Colors.lightBlueAccent,
                       foregroundColor: Colors.black,
                       elevation: 5,
                       minimumSize: const Size(double.infinity, 50),

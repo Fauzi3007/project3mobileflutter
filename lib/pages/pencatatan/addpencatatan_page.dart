@@ -114,7 +114,7 @@ class _AddPencatatanPageState extends State<AddPencatatanPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.lightBlueAccent,
                 foregroundColor: Colors.white,
                 elevation: 5,
                 minimumSize: const Size(double.infinity, 50),

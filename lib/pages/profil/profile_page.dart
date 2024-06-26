@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipegpdam/pages/login_page.dart';
-import '../models/pegawai.dart';
-import '../services/pegawai_services.dart';
-import '../services/auth_service.dart';
+import '../../models/pegawai.dart';
+import '../../services/pegawai_services.dart';
+import '../../services/auth_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -25,9 +26,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> fetchPegawai() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? id = prefs.getString('id_user');
+    int? id = prefs.getInt('id');
+
     try {
-      Pegawai pegawai = await PegawaiService().fetchPegawai(id.toString());
+      Pegawai pegawai = await PegawaiService().fetchPegawai(id!);
       setState(() {
         _pegawai = pegawai;
         _isLoading = false;
@@ -37,7 +39,9 @@ class _ProfilePageState extends State<ProfilePage> {
         _hasError = true;
         _isLoading = false;
       });
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -49,14 +53,14 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _hasError
-                    ? const Center(child: Text('Error fetching data'))
-                    : const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [],
-                      ),
+            // _isLoading
+            //     ? const Center(child: CircularProgressIndicator())
+            //     : _hasError
+            //         ? const Center(child: Text('Error fetching data'))
+            //         : const Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [],
+            //           ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -76,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildProfileSection() {
     if (_pegawai == null) {
-      return const Center(child: Text('No data available'));
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Container(

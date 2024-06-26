@@ -43,6 +43,7 @@ class _DataAbsensiPageState extends State<DataAbsensiPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Data Absensi'),
+        backgroundColor: Colors.lightBlueAccent,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
