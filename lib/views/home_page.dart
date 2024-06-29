@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sipegpdam/pages/cuti/cuti_page.dart';
-import 'package:sipegpdam/pages/absensi/dataabsensi_page.dart';
-import 'package:sipegpdam/pages/gaji/gaji_page.dart';
-import 'package:sipegpdam/pages/pelanggan/pelanggan_page.dart';
-import 'package:sipegpdam/pages/pencatatan/pencatatan_page.dart';
+import 'package:sipegpdam/views/cuti/cuti_page.dart';
+import 'package:sipegpdam/views/absensi/data_absensi_page.dart';
+import 'package:sipegpdam/views/cuti/persetujuan_cuti.dart';
+import 'package:sipegpdam/views/gaji/gaji_page.dart';
+import 'package:sipegpdam/views/gaji/pemberian_gaji.dart';
+import 'package:sipegpdam/views/pelanggan/pelanggan_page.dart';
+import 'package:sipegpdam/views/pencatatan/pencatatan_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -340,14 +342,16 @@ class _HomePageState extends State<HomePage> {
             _buildMenuItem('lib/images/approved.png', 'Persetujuan Cuti', () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CutiPage()),
+                MaterialPageRoute(
+                    builder: (context) => const PersetujuanCutiPage()),
               );
             }),
           if (isAdminKeuangan)
             _buildMenuItem('lib/images/budget.png', 'Pemberian Gaji', () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const GajiPage()),
+                MaterialPageRoute(
+                    builder: (context) => const PemberianGajiPage()),
               );
             }),
         ],

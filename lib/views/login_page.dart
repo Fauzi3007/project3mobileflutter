@@ -13,21 +13,56 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _handleLogin() async {
-    String message =
-        await login(_emailController.text, _passwordController.text);
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-    if (message == 'Login successful!') {
-      // ignore: use_build_context_synchronously
-      // await me();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainLayout()),
+  Future<void> _handleLogin() async {
+    try {
+      String message =
+          await login(_emailController.text, _passwordController.text);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
       );
+
+      if (message == 'Login successful!') {
+        String meMessage = await _handleMe();
+        if (meMessage == 'Fetch data successful!') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MainLayout()),
+          );
+        } else {
+          // Handle failure to fetch user data
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(meMessage)),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
+
+  Future<String> _handleMe() async {
+    try {
+      String message = await me();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+      return message;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to fetch user data: $e')),
+      );
+      return 'Error fetching user data';
     }
   }
 
@@ -89,9 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton.icon(
-                    onPressed: () {
-                      _handleLogin();
-                    },
+                    onPressed: _handleLogin,
                     icon: const Icon(Icons.login),
                     label: const Text('LOGIN'),
                     style: ElevatedButton.styleFrom(

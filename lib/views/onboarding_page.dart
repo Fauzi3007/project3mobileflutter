@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sipegpdam/pages/login_page.dart';
+import 'package:sipegpdam/views/login_page.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

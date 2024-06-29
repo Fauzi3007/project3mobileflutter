@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sipegpdam/pages/absensi/absensi_page.dart';
-import 'package:sipegpdam/pages/home_page.dart';
-import 'package:sipegpdam/pages/profil/profile_page.dart';
+import 'package:sipegpdam/views/absensi/absensi_page.dart';
+import 'package:sipegpdam/views/home_page.dart';
+import 'package:sipegpdam/views/profil/profile_page.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});

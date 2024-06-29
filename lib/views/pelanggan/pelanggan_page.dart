@@ -37,17 +37,28 @@ class _PelangganPageState extends State<PelangganPage> {
     }
   }
 
+  void _launchMapsUrl(double latitude, double longitude) async {
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    if (await canLaunchUrl(url as Uri)) {
+      await launchUrl(url as Uri);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pelanggan Page'),
+        backgroundColor: Colors.lightBlueAccent,
       ),
       body: Container(
         margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -57,8 +68,6 @@ class _PelangganPageState extends State<PelangganPage> {
             ),
           ],
         ),
-        height: double.infinity,
-        padding: const EdgeInsets.all(16),
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : _hasError
@@ -68,19 +77,34 @@ class _PelangganPageState extends State<PelangganPage> {
                     itemCount: _pelanggan.length,
                     itemBuilder: (context, index) {
                       final pelanggan = _pelanggan[index];
-                      return ListTile(
-                        title: Text(pelanggan.nomorPelanggan),
-                        subtitle: Text(pelanggan.namaPelanggan),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.location_on,
-                              color: Colors.lightBlueAccent),
-                          onPressed: () {
-                            double latitude = pelanggan.latitude;
-                            double longitude = pelanggan.longitude;
-                            String url =
-                                'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-                            launchUrl(Uri(path: url));
-                          },
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 0),
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(16),
+                          title: Text(
+                            pelanggan.nomorPelanggan,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            pelanggan.namaPelanggan,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.location_on,
+                                color: Colors.lightBlueAccent),
+                            onPressed: () {
+                              _launchMapsUrl(
+                                  pelanggan.latitude, pelanggan.longitude);
+                            },
+                          ),
                         ),
                       );
                     },

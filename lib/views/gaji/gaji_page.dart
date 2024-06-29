@@ -66,7 +66,7 @@ class _GajiPageState extends State<GajiPage> {
                     Text(
                       'Bulan : ${DateFormat('MMMM yyyy', 'id_ID').format(DateTime.now())}',
                       style: const TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 12.0,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
@@ -100,7 +100,7 @@ class _GajiPageState extends State<GajiPage> {
                           Text(
                             'Total :',
                             style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: 12.0,
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal),
                           ),
@@ -108,7 +108,7 @@ class _GajiPageState extends State<GajiPage> {
                           Text(
                             'Rp. 4.465.968',
                             style: TextStyle(
-                                fontSize: 20.0,
+                                fontSize: 12.0,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -142,12 +142,12 @@ class _GajiPageState extends State<GajiPage> {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 18.0),
+            style: const TextStyle(fontSize: 12.0),
           ),
           Text(
             value,
             style: const TextStyle(
-                fontSize: 20.0,
+                fontSize: 12.0,
                 color: Colors.black,
                 fontWeight: FontWeight.bold),
           ),

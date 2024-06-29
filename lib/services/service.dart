@@ -1,30 +1,30 @@
 // ignore_for_file: non_constant_identifier_names
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
 Future<String?> fetchToken() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
+  String? token = await _secureStorage.read(key: 'access_token');
 
   if (token != null) {
     return token;
   } else {
     print('Token not found');
+    return null;
   }
-  return null;
 }
 
-Future<String?> fetchUserId() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('id');
+Future<int?> fetchUserId() async {
+  String? userIdStr = await _secureStorage.read(key: 'id');
 
-  if (token != null) {
-    return token;
+  if (userIdStr != null) {
+    return int.tryParse(userIdStr);
   } else {
-    print('Token not found');
+    print('User ID not found');
+    return null;
   }
-  return null;
 }
 
-var PROTOCOL = 'https';
-var HOST = 'shining-verified-mantis.ngrok-free.app';
-var baseUrl = '$PROTOCOL://$HOST';
+const String PROTOCOL = 'https';
+const String HOST = 'shining-verified-mantis.ngrok-free.app';
+const String baseUrl = '$PROTOCOL://$HOST';

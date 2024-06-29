@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sipegpdam/pages/pencatatan/addpencatatan_page.dart';
+import 'package:sipegpdam/views/pencatatan/add_pencatatan_page.dart';
 
 class PencatatanPage extends StatefulWidget {
   const PencatatanPage({super.key});

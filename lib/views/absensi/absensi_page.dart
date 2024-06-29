@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sipegpdam/models/absensi.dart';
 import 'package:sipegpdam/services/absensi_services.dart';
+import 'package:sipegpdam/services/service.dart';
 
 class AbsensiPage extends StatefulWidget {
   const AbsensiPage({Key? key}) : super(key: key);
@@ -26,20 +27,21 @@ class _AbsensiPageState extends State<AbsensiPage> {
   final LatLng kantorPdamLocation = const LatLng(-0.914032, 100.467388);
   final double radius = 200; // Radius in meters
 
-  void _submitAbsensi() {
+  void _submitAbsensi() async {
     // Gather necessary data for creating absensi
     Absensi absensi = Absensi(
-        tanggal: DateTime.now(),
-        status: _status,
-        waktuMasuk:
-            DateFormat.Hm().parse(DateFormat.Hm().format(DateTime.now())),
-        waktuKeluar:
-            DateFormat.Hm().parse(DateFormat.Hm().format(DateTime.now())),
-        keterangan: keteranganController.text,
-        idPegawai: 1);
+      tanggal: DateTime.now(),
+      status: _status,
+      waktuMasuk: DateFormat.Hm().parse(DateFormat.Hm().format(DateTime.now())),
+      waktuKeluar:
+          DateFormat.Hm().parse(DateFormat.Hm().format(DateTime.now())),
+      keterangan: keteranganController.text,
+      idPegawai: fetchUserId() as int,
+    );
 
     // Call createAbsensi method from AbsensiService
-    absensiService.createAbsensi(absensi).then((_) {
+    try {
+      await absensiService.createAbsensi(absensi);
       // Show success message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -47,7 +49,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
           duration: Duration(seconds: 2),
         ),
       );
-    }).catchError((error) {
+    } catch (error) {
       // Show error message to the user if creating absensi fails
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -55,7 +57,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
           duration: const Duration(seconds: 2),
         ),
       );
-    });
+    }
   }
 
   @override
