@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sipegpdam/services/service.dart';
 import 'package:sipegpdam/views/login_page.dart';
 import 'package:sipegpdam/views/profil/update_password.dart';
 import 'package:sipegpdam/views/profil/update_profile_page.dart';
@@ -39,7 +40,8 @@ class _ProfilePageState extends State<ProfilePage> {
         return;
       }
 
-      Pegawai pegawai = await PegawaiService().fetchPegawai(id);
+      Pegawai pegawai =
+          await PegawaiService().fetchPegawai(await fetchPegawaiId());
       setState(() {
         _pegawai = pegawai;
         _isLoading = false;
@@ -54,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _handleLogout() async {
-    String message = await logout();
+    String message = await logoutService();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
@@ -89,11 +91,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               _buildProfileSection(),
                               const SizedBox(height: 20),
-                              _buildActionButtons(),
                             ],
                           ),
                         ),
                       ),
+            _buildActionButtons(),
           ],
         ),
       ),
@@ -282,7 +284,7 @@ class _ProfilePageState extends State<ProfilePage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.redAccent,
             foregroundColor: Colors.black,
             elevation: 5,
             minimumSize: const Size(double.infinity, 50),

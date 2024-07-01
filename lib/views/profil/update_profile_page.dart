@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sipegpdam/models/pegawai.dart';
+import 'dart:io'; // Add this import at the top of your file
 
 class UpdateProfilePage extends StatefulWidget {
   final Pegawai pegawai;
@@ -21,6 +23,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   late TextEditingController _statusNikahController;
   late TextEditingController _jumlahAnakController;
   late TextEditingController _fotoController;
+  XFile? _selectedImage;
+
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -54,10 +59,21 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     super.dispose();
   }
 
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = pickedFile;
+        _fotoController.text = pickedFile.path; // Store the image path
+      });
+    }
+  }
+
   void _saveForm() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      // You can handle the form data here, e.g., send it to a server
+      // Handle the form data here, e.g., send it to a server
       print('Updated Profile:');
       print('Nama Lengkap: ${_namaLengkapController.text}');
       print('Jenis Kelamin: ${_jenisKelaminController.text}');
@@ -68,6 +84,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       print('Status Nikah: ${_statusNikahController.text}');
       print('Jumlah Anak: ${_jumlahAnakController.text}');
       print('Foto: ${_fotoController.text}');
+      // Here you should handle the image file (upload it or save it)
     }
   }
 
@@ -134,11 +151,23 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Jumlah Anak is required' : null,
               ),
-              _buildTextFormField(
-                controller: _fotoController,
-                label: 'Foto',
-                validator: (value) =>
-                    value!.isEmpty ? 'Foto is required' : null,
+              Row(
+                children: [
+                  Expanded(
+                    child: _selectedImage == null
+                        ? const Text('No image selected.')
+                        : Image.file(
+                            File(_selectedImage!.path),
+                            height: 100,
+                            width: 100,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.camera_alt),
+                    onPressed: _pickImage,
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               ElevatedButton(

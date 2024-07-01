@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sipegpdam/views/login_page.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -11,24 +12,44 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
+  bool _dontShowAgain = false;
+
+  final storage = FlutterSecureStorage();
 
   final List<Map<String, String>> _pages = [
     {
       'title': 'Welcome',
       'description': 'Welcome to our app!',
-      'image': 'lib/images/welcome.png ',
+      'image': 'lib/images/welcome.png',
     },
     {
       'title': 'Features',
       'description': 'Explore amazing features!',
-      'image': 'lib/images/fitur.png ',
+      'image': 'lib/images/fitur.png',
     },
     {
       'title': 'Get Started',
       'description': 'Get started now!',
-      'image': 'lib/images/started.png ',
+      'image': 'lib/images/started.png',
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkDontShowAgain();
+  }
+
+  Future<void> _checkDontShowAgain() async {
+    final value = await storage.read(key: 'dont_show_onboarding');
+    setState(() {
+      _dontShowAgain = value == 'true';
+    });
+  }
+
+  Future<void> _setDontShowAgain(bool value) async {
+    await storage.write(key: 'dont_show_onboarding', value: value.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +62,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 controller: _pageController,
                 itemCount: _pages.length,
                 itemBuilder: (context, index) {
-                  return OnboardingPage(
-                    title: _pages[index]['title']!,
-                    description: _pages[index]['description']!,
-                    image: _pages[index]['image']!,
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _pages[index]['title']!,
+                          style: const TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          _pages[index]['description']!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 20),
+                        Image(image: AssetImage(_pages[index]['image']!))
+                      ],
+                    ),
                   );
                 },
                 onPageChanged: (index) {
@@ -59,6 +96,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: _buildPageIndicator(),
             ),
+            const SizedBox(height: 20),
+            if (_currentPage == _pages.length - 1)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Checkbox(
+                      value: _dontShowAgain,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _dontShowAgain = value ?? false;
+                        });
+                        _setDontShowAgain(_dontShowAgain);
+                      },
+                    ),
+                    const Text('Don\'t show again'),
+                  ],
+                ),
+              ),
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -77,7 +133,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     curve: Curves.ease,
                   );
                 } else {
-                  // Navigate to the next screen or perform any action after onboarding
+                  if (_dontShowAgain) {
+                    _setDontShowAgain(true);
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -85,7 +143,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 }
               },
               child: Text(
-                  _currentPage == _pages.length - 1 ? 'Get Started' : 'Next'),
+                _currentPage == _pages.length - 1 ? 'Get Started' : 'Next',
+              ),
             ),
             const SizedBox(height: 10),
           ],
@@ -111,46 +170,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       decoration: BoxDecoration(
         color: isActive ? Colors.lightBlueAccent : Colors.grey,
         borderRadius: BorderRadius.circular(12),
-      ),
-    );
-  }
-}
-
-class OnboardingPage extends StatelessWidget {
-  final String title;
-  final String description;
-  final String image;
-
-  const OnboardingPage({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.image,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            description,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 20),
-          Image.asset(
-            image,
-            height: 300,
-          ),
-        ],
       ),
     );
   }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sipegpdam/models/cuti.dart';
 import 'package:sipegpdam/views/cuti/add_cuti_page.dart';
-import 'package:sipegpdam/services/cuti_services.dart';
+import 'package:sipegpdam/controllers/cuti_controller.dart';
 
 class CutiPage extends StatefulWidget {
   const CutiPage({super.key});
@@ -12,26 +13,11 @@ class CutiPage extends StatefulWidget {
 }
 
 class _CutiPageState extends State<CutiPage> {
-  final CutiService _cutiService = CutiService();
-  late List<Cuti> _cutiList = [];
-
-  // Method to fetch cuti list
-  Future<void> _fetchCutiList() async {
-    try {
-      List<Cuti> cutiList = await _cutiService.fetchCutiList();
-      setState(() {
-        _cutiList = cutiList;
-      });
-    } catch (e) {
-      // Handle error gracefully
-      print('Error fetching cuti list: $e');
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _fetchCutiList();
+    // Fetch cuti list when the page initializes
+    Provider.of<CutiController>(context, listen: false).fetchCutiData();
   }
 
   @override
@@ -51,111 +37,131 @@ class _CutiPageState extends State<CutiPage> {
                 context,
                 MaterialPageRoute(builder: (context) => const AddCutiPage()),
               );
-              _fetchCutiList(); // Refresh cuti list after adding
+              Provider.of<CutiController>(context, listen: false)
+                  .fetchCutiList(); // Refresh cuti list after adding
             },
           ),
         ],
       ),
-      body: _cutiList.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _cutiList.length,
-              itemBuilder: (context, index) {
-                Cuti cuti = _cutiList[index];
-                return Card(
-                  elevation: 2.0,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            // Left Section: Number and "Hari" text
-                            SizedBox(
-                              width: 80,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    cuti.idCuti.toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24.0,
-                                    ),
+      body: Consumer<CutiController>(
+        builder: (context, cutiController, child) {
+          if (cutiController.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (cutiController.cutiList.isEmpty) {
+            return const Center(child: Text('Tidak ada data cuti'));
+          }
+
+          return ListView.builder(
+            itemCount: cutiController.cutiList.length,
+            itemBuilder: (context, index) {
+              Cuti cuti = cutiController.cutiList[index];
+              return Card(
+                elevation: 2.0,
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          // Left Section: Number and "Hari" text
+                          SizedBox(
+                            width: 80,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  cuti.tanggalSelesai
+                                      .difference(cuti.tanggalMulai)
+                                      .inDays
+                                      .toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0,
                                   ),
-                                  const SizedBox(height: 4),
-                                  const Text(
-                                    'Hari',
-                                    style: TextStyle(fontSize: 14.0),
-                                  ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  'Hari',
+                                  style: TextStyle(fontSize: 14.0),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 12),
-                            // Vertical Divider
-                            const VerticalDivider(
-                              width: 1,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(width: 12),
-                            // Right Section: Dates and Status
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${DateFormat('dd MMMM yyyy').format(cuti.tanggalMulai)} - ${DateFormat('dd MMMM yyyy').format(cuti.tanggalSelesai)}',
+                          ),
+                          // Vertical Divider
+
+                          // Right Section: Dates and Status
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          '${DateFormat('dd MMMM yyyy').format(cuti.tanggalMulai)}',
                                           style:
-                                              const TextStyle(fontSize: 16.0),
+                                              const TextStyle(fontSize: 12.0),
                                         ),
-                                      ),
-                                      Text(
-                                        cuti.status
-                                                .substring(0, 1)
-                                                .toUpperCase() +
-                                            cuti.status.substring(1),
-                                        style: const TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.green,
-                                          fontWeight: FontWeight.bold,
+                                        Text(
+                                          '${DateFormat('dd MMMM yyyy').format(cuti.tanggalSelesai)}',
+                                          style:
+                                              const TextStyle(fontSize: 12.0),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Divider(
-                                    color: Colors.grey,
-                                    height: 1,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  // Description
-                                  Text(
-                                    'Keterangan: ${cuti.keterangan}',
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
+                                      ],
                                     ),
+                                    const Spacer(),
+                                    Text(
+                                      cuti.status
+                                              .substring(0, 1)
+                                              .toUpperCase() +
+                                          cuti.status.substring(1),
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: cuti.status == 'Menunggu'
+                                            ? Colors.orange
+                                            : cuti.status == 'Disetujui'
+                                                ? Colors.green
+                                                : Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                const Divider(
+                                  color: Colors.grey,
+                                  height: 1,
+                                ),
+                                const SizedBox(height: 8),
+                                // Description
+                                Text(
+                                  'Keterangan: ${cuti.keterangan}',
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

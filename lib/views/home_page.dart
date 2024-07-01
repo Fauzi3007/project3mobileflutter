@@ -18,42 +18,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late bool isAdminAdministrasi;
   late bool isAdminKeuangan;
-  // final PegawaiService _PegawaiService = PegawaiService();
-  // late Pegawai _pegawaiList;
-  // late String role;
-
-  // // Future<void> _fetchCutiList() async {
-  // //   try {
-  // //     Pegawai pegawaiList = await _PegawaiService.fetchPegawai(1);
-  // //     setState(() {
-  // //       _pegawaiList = pegawaiList;
-  // //     });
-  // //   } catch (e) {
-  // //     // Handle error gracefully
-  // //     print('Error fetching cuti list: $e');
-  // //   }
-  // // }
-
-  // Future<void> _fetchHakAkses() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? role = prefs.getString('hak_akses');
-  //   setState(() {
-  //     role = role!;
-  //     if (role == 'admin administrasi') {
-  //       isAdminAdministrasi = true;
-  //     } else if (role == 'admin keuangan') {
-  //       isAdminKeuangan = true;
-  //     }
-  //   });
-  // }
 
   @override
   void initState() {
     super.initState();
-    // _fetchCutiList();
-    // _fetchHakAkses();
-    isAdminAdministrasi = true;
-    isAdminKeuangan = true;
+    isAdminAdministrasi = false;
+    isAdminKeuangan = false;
   }
 
   @override
@@ -98,7 +68,7 @@ class _HomePageState extends State<HomePage> {
               opacity: 0.3,
               child: Image.asset(
                 'lib/images/tirta.png',
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           ),

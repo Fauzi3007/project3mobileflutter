@@ -19,7 +19,7 @@ class PegawaiService {
     }
   }
 
-  Future<Pegawai> fetchPegawai(int id) async {
+  Future<Pegawai> fetchPegawai(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/pegawai/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',

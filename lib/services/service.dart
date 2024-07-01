@@ -14,14 +14,27 @@ Future<String?> fetchToken() async {
   }
 }
 
-Future<int?> fetchUserId() async {
-  String? userIdStr = await _secureStorage.read(key: 'id');
+Future<String> fetchUserId() async {
+  String? userIdStr = await _secureStorage.read(key: 'id_user');
 
   if (userIdStr != null) {
-    return int.tryParse(userIdStr);
+    print('User ID: $userIdStr');
+    return userIdStr;
   } else {
     print('User ID not found');
-    return null;
+    return '';
+  }
+}
+
+Future<String> fetchPegawaiId() async {
+  String? userIdStr = await _secureStorage.read(key: 'id_pegawai');
+
+  if (userIdStr != null) {
+    print('Pegawai ID: $userIdStr');
+    return userIdStr;
+  } else {
+    print('Pegawai ID not found');
+    return '';
   }
 }
 

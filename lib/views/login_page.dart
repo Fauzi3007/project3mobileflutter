@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sipegpdam/controllers/auth_controller.dart';
 import 'package:sipegpdam/mainlayout.dart';
-import '../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,53 +22,35 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleLogin() async {
-    try {
-      String message =
-          await login(_emailController.text, _passwordController.text);
+    final authController = Provider.of<AuthController>(context, listen: false);
+    final email = _emailController.text;
+    final password = _passwordController.text;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+    // Call login method from AuthController
+    await authController.login(email, password);
 
-      if (message == 'Login successful!') {
-        String meMessage = await _handleMe();
-        if (meMessage == 'Fetch data successful!') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const MainLayout()),
-          );
-        } else {
-          // Handle failure to fetch user data
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(meMessage)),
-          );
-        }
-      }
-    } catch (e) {
+    // Handle login result based on controller state
+    if (authController.errorMessage != null) {
+      // Show error message if login fails
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred: $e')),
+        SnackBar(content: Text(authController.errorMessage!)),
       );
-    }
-  }
-
-  Future<String> _handleMe() async {
-    try {
-      String message = await me();
-
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MainLayout()),
+      );
+    } else {
+      // Navigate to the main layout if login is successful
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+        SnackBar(content: Text(authController.errorMessage!)),
       );
-      return message;
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to fetch user data: $e')),
-      );
-      return 'Error fetching user data';
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authController = Provider.of<AuthController>(context);
+
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
       body: Center(
@@ -76,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(30.0),
             child: Container(
               padding: const EdgeInsets.all(16.0),
-              height: 400,
+              height: 450,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -137,6 +120,10 @@ class _LoginPageState extends State<LoginPage> {
                       minimumSize: const Size(double.infinity, 50),
                     ),
                   ),
+                  if (authController.isLoading) ...[
+                    const SizedBox(height: 16.0),
+                    const CircularProgressIndicator(),
+                  ],
                 ],
               ),
             ),
