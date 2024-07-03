@@ -19,6 +19,21 @@ class PegawaiService {
     }
   }
 
+  Future<List> fetchJabatanCabang(String id) async {
+    final response = await http
+        .get(Uri.parse('$baseUrl/api/jabatanDanCabang/$id'), headers: {
+      'Authorization': 'Bearer ${await fetchToken()}',
+      'Accept': 'application/json'
+    });
+
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse;
+    } else {
+      throw Exception('Failed to load jabatan cabang');
+    }
+  }
+
   Future<Pegawai> fetchPegawai(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/pegawai/$id'),
         headers: {
@@ -27,7 +42,8 @@ class PegawaiService {
         });
 
     if (response.statusCode == 200) {
-      return Pegawai.fromJson(json.decode(response.body));
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+      return Pegawai.fromJson(jsonResponse);
     } else {
       throw Exception('Failed to load pegawai');
     }

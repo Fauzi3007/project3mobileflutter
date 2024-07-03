@@ -63,7 +63,8 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change Password'),
+        title: const Text('Change Password',
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: Padding(

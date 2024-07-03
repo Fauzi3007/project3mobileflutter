@@ -4,7 +4,6 @@ class Pegawai {
   String jenisKelamin;
   String tglLahir;
   String telepon;
-  String email;
   String alamat;
   String statusNikah;
   int jumlahAnak;
@@ -20,7 +19,6 @@ class Pegawai {
     required this.jenisKelamin,
     required this.tglLahir,
     required this.telepon,
-    required this.email,
     required this.alamat,
     required this.statusNikah,
     required this.jumlahAnak,
@@ -38,7 +36,6 @@ class Pegawai {
       jenisKelamin: json['jenis_kelamin'],
       tglLahir: json['tgl_lahir'],
       telepon: json['telepon'],
-      email: json['email'],
       alamat: json['alamat'],
       statusNikah: json['status_nikah'],
       jumlahAnak: json['jumlah_anak'],
@@ -57,7 +54,6 @@ class Pegawai {
       'jenis_kelamin': jenisKelamin,
       'tgl_lahir': tglLahir,
       'telepon': telepon,
-      'email': email,
       'alamat': alamat,
       'status_nikah': statusNikah,
       'jumlah_anak': jumlahAnak,

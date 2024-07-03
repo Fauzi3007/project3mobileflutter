@@ -19,7 +19,7 @@ class AbsensiService {
     }
   }
 
-  Future<Absensi> fetchAbsensi(String id) async {
+  Future<List<Absensi>> fetchAbsensi(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/absensi/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
@@ -27,7 +27,8 @@ class AbsensiService {
         });
 
     if (response.statusCode == 200) {
-      return Absensi.fromJson(json.decode(response.body));
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Absensi.fromJson(data)).toList();
     } else {
       throw Exception('Failed to load absensi');
     }

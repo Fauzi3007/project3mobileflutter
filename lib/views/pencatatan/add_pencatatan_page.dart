@@ -35,7 +35,8 @@ class _AddPencatatanPageState extends State<AddPencatatanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tambah Pencatatan'),
+        title: const Text('Tambah Pencatatan',
+            style: TextStyle(color: Colors.white, fontSize: 16)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

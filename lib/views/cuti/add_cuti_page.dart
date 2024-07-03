@@ -81,7 +81,8 @@ class _AddCutiPageState extends State<AddCutiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pengajuan Cuti'),
+        title: const Text('Pengajuan Cuti',
+            style: TextStyle(color: Colors.white, fontSize: 16)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

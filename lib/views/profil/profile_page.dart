@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:sipegpdam/services/service.dart';
+import 'package:provider/provider.dart';
+import 'package:sipegpdam/controllers/pegawai_controller.dart';
+import 'package:sipegpdam/services/auth_service.dart';
 import 'package:sipegpdam/views/login_page.dart';
 import 'package:sipegpdam/views/profil/update_password.dart';
 import 'package:sipegpdam/views/profil/update_profile_page.dart';
 import '../../models/pegawai.dart';
-import '../../services/pegawai_services.dart';
-import '../../services/auth_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -16,43 +15,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Pegawai? _pegawai;
-  bool _isLoading = true;
-  bool _hasError = false;
-  final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
-
   @override
   void initState() {
     super.initState();
-    fetchPegawai();
-  }
-
-  Future<void> fetchPegawai() async {
-    try {
-      String? idString = await _secureStorage.read(key: 'id');
-      int? id = idString != null ? int.tryParse(idString) : null;
-
-      if (id == null) {
-        setState(() {
-          _hasError = true;
-          _isLoading = false;
-        });
-        return;
-      }
-
-      Pegawai pegawai =
-          await PegawaiService().fetchPegawai(await fetchPegawaiId());
-      setState(() {
-        _pegawai = pegawai;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _hasError = true;
-        _isLoading = false;
-      });
-      print(e);
-    }
+    // Fetch Pegawai data using Provider
+    Provider.of<PegawaiController>(context, listen: false).fetchPegawaiData();
+    Provider.of<PegawaiController>(context, listen: false)
+        .fetchNamaJabatanCabang();
   }
 
   Future<void> _handleLogout() async {
@@ -61,7 +30,6 @@ class _ProfilePageState extends State<ProfilePage> {
       SnackBar(content: Text(message)),
     );
     if (message == 'Logout successful!') {
-      await _secureStorage.deleteAll(); // Clear all secure storage
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -71,135 +39,218 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        backgroundColor: Colors.lightBlueAccent,
-      ),
-      body: Container(
-        color: Colors.grey[200],
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _hasError
-                    ? const Center(child: Text('Error fetching data'))
-                    : Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              _buildProfileSection(),
-                              const SizedBox(height: 20),
-                            ],
-                          ),
-                        ),
-                      ),
-            _buildActionButtons(),
-          ],
-        ),
-      ),
-    );
-  }
+    return Consumer<PegawaiController>(
+      builder: (context, controller, child) {
+        if (controller.isLoading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-  Widget _buildProfileSection() {
-    if (_pegawai == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    return Container(
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Profile',
+                style: TextStyle(color: Colors.white, fontSize: 16)),
+            backgroundColor: Colors.lightBlueAccent,
           ),
-        ],
-      ),
-      height: 300,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          body: Column(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage(
-                        'https://example.com/profile.jpg', // Placeholder image
-                        scale: .8,
-                      ),
+                flex: 4,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        if (controller.pegawaiList.isNotEmpty)
+                          _buildProfileSection(controller.pegawaiList[0],
+                              controller.jabatanCabang)
+                        else
+                          _buildProfileSection(
+                              Pegawai(
+                                idUser: 0,
+                                idPegawai: 0,
+                                jenisKelamin: 'No data',
+                                tglLahir: 'No data',
+                                telepon: 'No data',
+                                alamat: 'No data',
+                                namaLengkap: 'No data',
+                                statusNikah: 'No data',
+                                jumlahAnak: 0,
+                                gajiPokok: 0.00,
+                                kantorCabang: 0,
+                                jabatan: 0,
+                                foto:
+                                    'https://imgs.search.brave.com/a0ZfLM4icBBGMQOp7PVGbzq5IHURITDSqg19VROGA6Y/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMjAw/MDY3MjcwMi9waG90/by9oYXBweS1zbWls/aW5nLW1hdHVyZS1p/bmRpYW4tb3ItbGF0/aW4tYnVzaW5lc3Mt/bWFuLWNlby10cmFk/ZXItdXNpbmctY29t/cHV0ZXItdHlwaW5n/LXdvcmtpbmctaW4u/d2VicD9iPTEmcz0x/NzA2NjdhJnc9MCZr/PTIwJmM9UEV4U2Iw/R0lFQWxiQm04d0R0/TnVjS0pyVlZKT1Rx/bjlrSEVadlFCaHpq/VT0',
+                              ),
+                              []),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    _buildProfileDataRow(
-                      'Jenis Kelamin:',
-                      _pegawai?.jenisKelamin ?? 'Not Available',
-                    ),
-                    const SizedBox(height: 10),
-                    _buildProfileDataRow(
-                      'Tanggal Lahir:',
-                      _pegawai?.tglLahir ?? 'Not Available',
-                    ),
-                    const SizedBox(height: 10),
-                    _buildProfileDataRow(
-                      'Telepon:',
-                      _pegawai?.telepon ?? 'Not Available',
-                    ),
-                    const SizedBox(height: 10),
-                    _buildProfileDataRow(
-                      'Alamat:',
-                      _pegawai?.alamat ?? 'Not Available',
-                    ),
-                  ],
+                  ),
                 ),
               ),
-              const SizedBox(width: 30),
-              Expanded(
+              // Action buttons
+              Padding(
+                padding: const EdgeInsets.all(16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildProfileDataRow(
-                      'Nama Lengkap:',
-                      _pegawai?.namaLengkap ?? 'Not Available',
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (controller.pegawaiList.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UpdateProfilePage(
+                                pegawai: controller.pegawaiList[0],
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.edit),
+                      label: const Text('Ubah Data'),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        elevation: 4,
+                        minimumSize: const Size(double.infinity, 45),
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    _buildProfileDataRow(
-                      'Status Nikah:',
-                      _pegawai?.statusNikah ?? 'Not Available',
+                    const SizedBox(height: 8),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const UpdatePasswordPage()),
+                        );
+                      },
+                      icon: const Icon(Icons.lock),
+                      label: const Text('Ganti Password'),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        elevation: 4,
+                        minimumSize: const Size(double.infinity, 45),
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    _buildProfileDataRow(
-                      'Jumlah Anak:',
-                      _pegawai?.jumlahAnak.toString() ?? 'Not Available',
-                    ),
-                    const SizedBox(height: 10),
-                    _buildProfileDataRow(
-                      'Gaji Pokok:',
-                      _pegawai?.gajiPokok.toString() ?? 'Not Available',
-                    ),
-                    const SizedBox(height: 10),
-                    _buildProfileDataRow(
-                      'Kantor Cabang:',
-                      _pegawai?.kantorCabang.toString() ?? 'Not Available',
-                    ),
-                    const SizedBox(height: 10),
-                    _buildProfileDataRow(
-                      'Jabatan:',
-                      _pegawai?.jabatan.toString() ?? 'Not Available',
+                    const SizedBox(height: 8),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        _handleLogout();
+                      },
+                      icon: const Icon(Icons.logout),
+                      label: const Text('Logout'),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Colors.black,
+                        elevation: 4,
+                        minimumSize: const Size(double.infinity, 45),
+                      ),
                     ),
                   ],
                 ),
               ),
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildProfileSection(Pegawai pegawai, List jabatanList) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 6,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage(
+                pegawai.foto.isNotEmpty
+                    ? pegawai.foto
+                    : 'https://i.pinimg.com/564x/82/8d/b9/828db9be5b13a6addefcd70431c8845d.jpg', // Default placeholder
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Center(
+            child: Text(
+              pegawai.namaLengkap,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Center(
+            child: Text(
+              jabatanList.isEmpty ? 'No data' : jabatanList[0],
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          _buildProfileDataRow(
+            'Tanggal Lahir:',
+            pegawai.tglLahir,
+          ),
+          const SizedBox(height: 12),
+          _buildProfileDataRow(
+            'Telepon:',
+            pegawai.telepon,
+          ),
+          const SizedBox(height: 12),
+          _buildProfileDataRow(
+            'Status Nikah:',
+            pegawai.statusNikah,
+          ),
+          const SizedBox(height: 12),
+          _buildProfileDataRow(
+            'Jumlah Anak:',
+            pegawai.jumlahAnak.toString(),
+          ),
+          const SizedBox(height: 12),
+          _buildProfileDataRow(
+            'Gaji Pokok:',
+            pegawai.gajiPokok.toStringAsFixed(2),
+          ),
+          const SizedBox(height: 12),
+          _buildProfileDataRow(
+            'Cabang:',
+            jabatanList.isEmpty ? 'No data' : jabatanList[1],
+          ),
+          const SizedBox(height: 12),
+          _buildProfileDataRow(
+            'Alamat:',
+            pegawai.alamat,
           ),
         ],
       ),
@@ -207,90 +258,39 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildProfileDataRow(String label, String value) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 10),
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.end,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActionButtons() {
-    return Column(
-      children: [
-        ElevatedButton.icon(
-          onPressed: () {
-            if (_pegawai != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        UpdateProfilePage(pegawai: _pegawai!)),
-              );
-            }
-          },
-          icon: const Icon(Icons.edit),
-          label: const Text('Ubah Data'),
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
+              ),
             ),
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
-            elevation: 5,
-            minimumSize: const Size(double.infinity, 50),
           ),
-        ),
-        const SizedBox(height: 10),
-        ElevatedButton.icon(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const UpdatePasswordPage()),
-            );
-          },
-          icon: const Icon(Icons.lock),
-          label: const Text('Ganti Password'),
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+          Expanded(
+            flex: 3,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
-            elevation: 5,
-            minimumSize: const Size(double.infinity, 50),
           ),
-        ),
-        const SizedBox(height: 10),
-        ElevatedButton.icon(
-          onPressed: () {
-            _handleLogout();
-          },
-          icon: const Icon(Icons.logout),
-          label: const Text('Logout'),
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            backgroundColor: Colors.redAccent,
-            foregroundColor: Colors.black,
-            elevation: 5,
-            minimumSize: const Size(double.infinity, 50),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

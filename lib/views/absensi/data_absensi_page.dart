@@ -21,7 +21,8 @@ class _DataAbsensiPageState extends State<DataAbsensiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Data Absensi'),
+        title: const Text('Data Absensi',
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: Consumer<AbsensiController>(

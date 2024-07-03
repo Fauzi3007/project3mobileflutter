@@ -18,7 +18,7 @@ class GajiService {
     }
   }
 
-  Future<Gaji> fetchGaji(String id) async {
+  Future<List<Gaji>> fetchGaji(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/gaji/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
@@ -26,7 +26,8 @@ class GajiService {
         });
 
     if (response.statusCode == 200) {
-      return Gaji.fromJson(json.decode(response.body));
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Gaji.fromJson(data)).toList();
     } else {
       throw Exception('Failed to load gaji');
     }

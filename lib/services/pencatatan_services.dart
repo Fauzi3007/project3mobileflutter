@@ -19,7 +19,7 @@ class PencatatanService {
     }
   }
 
-  Future<Pencatatan> fetchPencatatan(String id) async {
+  Future<List<Pencatatan>> fetchPencatatan(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/pencatatan/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
@@ -27,7 +27,8 @@ class PencatatanService {
         });
 
     if (response.statusCode == 200) {
-      return Pencatatan.fromJson(json.decode(response.body));
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Pencatatan.fromJson(data)).toList();
     } else {
       throw Exception('Failed to load pencatatan');
     }

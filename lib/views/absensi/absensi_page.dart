@@ -34,7 +34,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
       waktuKeluar:
           DateFormat.Hm().parse(DateFormat.Hm().format(DateTime.now())),
       keterangan: keteranganController.text,
-      idPegawai: fetchUserId() as int,
+      idPegawai: fetchPegawaiId() as int,
     );
 
     // Call createAbsensi method from AbsensiController
@@ -330,9 +330,9 @@ class _AbsensiPageState extends State<AbsensiPage> {
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
-                        onPressed: () {
-                          _submitAbsensi(absensiController);
-                        },
+                        onPressed: (!isMockLocation && isWithinRadius)
+                            ? () => _submitAbsensi(absensiController)
+                            : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.lightBlueAccent,
                           minimumSize: const Size(double.infinity, 50),

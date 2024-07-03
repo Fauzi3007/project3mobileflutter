@@ -32,7 +32,8 @@ class _PelangganPageState extends State<PelangganPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pelanggan Page'),
+        title: const Text('Pelanggan Page',
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: Consumer<PelangganController>(

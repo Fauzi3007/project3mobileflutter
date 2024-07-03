@@ -36,7 +36,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
         TextEditingController(text: widget.pegawai.jenisKelamin);
     _tglLahirController = TextEditingController(text: widget.pegawai.tglLahir);
     _teleponController = TextEditingController(text: widget.pegawai.telepon);
-    _emailController = TextEditingController(text: widget.pegawai.email);
     _alamatController = TextEditingController(text: widget.pegawai.alamat);
     _statusNikahController =
         TextEditingController(text: widget.pegawai.statusNikah);
@@ -92,7 +91,8 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update Profile'),
+        title: const Text('Update Profile',
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: Padding(

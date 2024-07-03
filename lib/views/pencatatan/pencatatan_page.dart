@@ -18,7 +18,7 @@ class _PencatatanPageState extends State<PencatatanPage> {
     // Fetch data when the page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<PencatatanController>(context, listen: false)
-          .fetchPencatatanList();
+          .fetchPencatatanData();
     });
   }
 
@@ -26,7 +26,8 @@ class _PencatatanPageState extends State<PencatatanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pencatatan Page'),
+        title: const Text('Pencatatan Page',
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         backgroundColor: Colors.lightBlueAccent,
         actions: [
           IconButton(
@@ -50,6 +51,10 @@ class _PencatatanPageState extends State<PencatatanPage> {
 
           if (controller.errorMessage != null) {
             return Center(child: Text(controller.errorMessage!));
+          }
+
+          if (controller.pencatatanList.isEmpty) {
+            return const Center(child: Text('Tidak ada data pencatatan'));
           }
 
           return ListView.builder(

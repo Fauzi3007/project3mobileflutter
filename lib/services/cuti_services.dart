@@ -18,14 +18,15 @@ class CutiService {
     }
   }
 
-  Future<Cuti> fetchCuti(String id) async {
+  Future<List<Cuti>> fetchCuti(String id) async {
     final response = await http.get(Uri.parse('$baseUrl/api/cuti/$id'),
         headers: {
           'Authorization': 'Bearer ${await fetchToken()}',
           'Accept': 'application/json'
         });
     if (response.statusCode == 200) {
-      return Cuti.fromJson(json.decode(response.body));
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Cuti.fromJson(data)).toList();
     } else {
       throw Exception('Failed to load cuti');
     }

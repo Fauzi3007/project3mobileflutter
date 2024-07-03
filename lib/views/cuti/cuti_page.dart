@@ -26,7 +26,7 @@ class _CutiPageState extends State<CutiPage> {
       appBar: AppBar(
         title: const Text(
           'Cuti',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontSize: 16),
         ),
         backgroundColor: Colors.lightBlueAccent,
         actions: [
@@ -153,6 +153,39 @@ class _CutiPageState extends State<CutiPage> {
                             ),
                           ),
                         ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete,
+                            color: Colors.red, size: 14),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Konfirmasi'),
+                                content: const Text(
+                                    'Apakah Anda yakin ingin menghapus cuti ini?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Batal'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Provider.of<CutiController>(context,
+                                              listen: false)
+                                          .deleteCuti(cuti.idCuti as String);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Hapus'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),

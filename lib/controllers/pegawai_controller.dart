@@ -6,10 +6,12 @@ import '.././services/pegawai_services.dart';
 class PegawaiController extends ChangeNotifier {
   final PegawaiService _service = PegawaiService();
   List<Pegawai> _pegawaiList = [];
+  List _jabatanCabang = [];
   bool _isLoading = false;
   String? _errorMessage;
 
   List<Pegawai> get pegawaiList => _pegawaiList;
+  List get jabatanCabang => _jabatanCabang;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -33,8 +35,26 @@ class PegawaiController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _pegawaiList =
-          await _service.fetchPegawai(await fetchPegawaiId()) as List<Pegawai>;
+      Pegawai pegawai = await _service.fetchPegawai(await fetchPegawaiId());
+      _pegawaiList = [pegawai];
+      print(_pegawaiList); // Wrap in a list
+      _errorMessage = null;
+    } catch (e) {
+      _errorMessage = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchNamaJabatanCabang() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      List jabatanCabang =
+          await _service.fetchJabatanCabang(await fetchPegawaiId());
+      _jabatanCabang = [jabatanCabang];
       _errorMessage = null;
     } catch (e) {
       _errorMessage = e.toString();

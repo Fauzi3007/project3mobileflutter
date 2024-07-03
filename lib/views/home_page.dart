@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:sipegpdam/controllers/pegawai_controller.dart';
 import 'package:sipegpdam/views/cuti/cuti_page.dart';
 import 'package:sipegpdam/views/absensi/data_absensi_page.dart';
 import 'package:sipegpdam/views/cuti/persetujuan_cuti.dart';
@@ -22,6 +24,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    Provider.of<PegawaiController>(context, listen: false).fetchPegawaiData();
+
     isAdminAdministrasi = false;
     isAdminKeuangan = false;
   }
@@ -77,8 +81,9 @@ class _HomePageState extends State<HomePage> {
             children: [
               Row(
                 children: [
-                  const CircleAvatar(
-                    backgroundImage: AssetImage('lib/images/avatar.jpeg'),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        'https://imgs.search.brave.com/a0ZfLM4icBBGMQOp7PVGbzq5IHURITDSqg19VROGA6Y/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMjAw/MDY3MjcwMi9waG90/by9oYXBweS1zbWls/aW5nLW1hdHVyZS1p/bmRpYW4tb3ItbGF0/aW4tYnVzaW5lc3Mt/bWFuLWNlby10cmFk/ZXItdXNpbmctY29t/cHV0ZXItdHlwaW5n/LXdvcmtpbmctaW4u/d2VicD9iPTEmcz0x/NzA2NjdhJnc9MCZr/PTIwJmM9UEV4U2Iw/R0lFQWxiQm04d0R0/TnVjS0pyVlZKT1Rx/bjlrSEVadlFCaHpq/VT0'),
                     radius: 30,
                   ),
                   const SizedBox(width: 16),

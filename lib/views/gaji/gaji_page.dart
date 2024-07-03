@@ -26,20 +26,11 @@ class _GajiPageState extends State<GajiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gaji'),
+        title: const Text('Gaji',
+            style: TextStyle(color: Colors.white, fontSize: 16)),
       ),
       body: Consumer<GajiController>(
         builder: (context, gajiController, child) {
-          if (gajiController.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (gajiController.gajiList.isEmpty) {
-            return const Center(child: Text('Tidak ada data gaji'));
-          }
-
-          Gaji gaji = gajiController.gajiList[0];
-
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -67,87 +58,93 @@ class _GajiPageState extends State<GajiPage> {
                       backgroundColor: Colors.lightBlueAccent,
                     ),
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Bulan : ${DateFormat('MMMM yyyy', 'id_ID').format(DateTime.now())}',
-                          style: const TextStyle(
-                              fontSize: 12.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 16.0),
-                        _buildRow(
-                          'Gaji Pokok',
-                          'Rp. ${gaji.gajiPokok}',
-                          'Potongan',
-                          'Rp. ${gaji.potongan}',
-                        ),
-                        const SizedBox(height: 16.0),
-                        _buildRow(
-                          'Tunjangan Jabatan',
-                          'Rp. ${gaji.tunjanganJabatan}',
-                          'Pajak',
-                          'Rp. ${gaji.pajak}',
-                        ),
-                        const SizedBox(height: 16.0),
-                        _buildRow(
-                          'Tunjangan Nikah',
-                          'Rp. ${gaji.tunjanganNikah}',
-                          'Tunjangan Anak',
-                          'Rp. ${gaji.tunjanganAnak}',
-                        ),
-                        const SizedBox(height: 16.0),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 0, 45.0, 16.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Total :',
-                                style: TextStyle(
-                                    fontSize: 12.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              const Spacer(),
-                              Text(
-                                'Rp. ${gaji.totalGaji}',
-                                style: const TextStyle(
-                                    fontSize: 12.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const SizedBox(height: 16.0),
+                  if (gajiController.isLoading)
+                    const Center(child: CircularProgressIndicator())
+                  else if (gajiController.gajiList.isEmpty)
+                    const Center(child: Text('Tidak ada data gaji'))
+                  else
+                    _buildGajiDetails(gajiController.gajiList[0]),
                 ],
               ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildGajiDetails(Gaji gaji) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Bulan : ${DateFormat('MMMM yyyy', 'id_ID').format(DateTime.now())}',
+            style: const TextStyle(
+                fontSize: 12.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16.0),
+          _buildRow(
+            'Gaji Pokok',
+            'Rp. ${gaji.gajiPokok}',
+            'Potongan',
+            'Rp. ${gaji.potongan}',
+          ),
+          const SizedBox(height: 16.0),
+          _buildRow(
+            'Tunjangan Jabatan',
+            'Rp. ${gaji.tunjanganJabatan}',
+            'Pajak',
+            'Rp. ${gaji.pajak}',
+          ),
+          const SizedBox(height: 16.0),
+          _buildRow(
+            'Tunjangan Nikah',
+            'Rp. ${gaji.tunjanganNikah}',
+            'Tunjangan Anak',
+            'Rp. ${gaji.tunjanganAnak}',
+          ),
+          const SizedBox(height: 16.0),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 0, 45.0, 16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Total :',
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal),
+                ),
+                const Spacer(),
+                Text(
+                  'Rp. ${gaji.totalGaji}',
+                  style: const TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

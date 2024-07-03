@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sipegpdam/services/service.dart';
 import '../models/pencatatan.dart';
 import '.././services/pencatatan_services.dart';
 
@@ -18,6 +19,21 @@ class PencatatanController extends ChangeNotifier {
 
     try {
       _pencatatanList = await _service.fetchPencatatanList();
+      _errorMessage = null;
+    } catch (e) {
+      _errorMessage = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchPencatatanData() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _pencatatanList = await _service.fetchPencatatan(await fetchPegawaiId());
       _errorMessage = null;
     } catch (e) {
       _errorMessage = e.toString();
